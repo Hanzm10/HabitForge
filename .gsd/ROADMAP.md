@@ -45,16 +45,16 @@
 
 ---
 
-### Phase 4: AUTHENTICATION
+### Phase 4: AUTHENTICATION ✅
 > Clerk integration with protected routes and role-based access.
 
-- [ ] Configure Clerk provider with app keys
-- [ ] Sign-in page (`/sign-in`)
-- [ ] Sign-up page (`/sign-up`)
-- [ ] Protected route wrapper component
-- [ ] Clerk → Supabase profile sync (on sign-up)
-- [ ] Role-based route guard (admin vs user)
-- [ ] Verify: Sign up → profile created in Supabase, protected routes redirect
+- [x] Configure Clerk provider with app keys
+- [x] Sign-in page (`/sign-in`)
+- [x] Sign-up page (`/sign-up`)
+- [x] Protected route wrapper component
+- [x] Clerk → Supabase profile sync (on sign-up)
+- [x] Role-based route guard (admin vs user)
+- [x] Verify: Sign up → profile created in Supabase, protected routes redirect
 
 ---
 
@@ -105,7 +105,7 @@
 | 1     | Inception      | ✅ Complete |
 | 2     | Scaffolding    | ✅ Complete |
 | 3     | Landing Page   | ✅ Complete |
-| 4     | Authentication | ⬜ Next     |
-| 5     | User Dashboard | ⬜ Blocked  |
+| 4     | Authentication | ✅ Complete |
+| 5     | User Dashboard | ⬜ Next     |
 | 6     | Admin Dashboard| ⬜ Blocked  |
 | 7     | Polish & Deploy| ⬜ Blocked  |

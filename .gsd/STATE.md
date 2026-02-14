@@ -49,3 +49,4 @@
 | 2026-02-15 | Phase 3: Test infra (Vitest + RTL) installed.    |
 | 2026-02-15 | Phase 3: TDD — 7 test files, 18 tests (all GREEN).|
 | 2026-02-15 | Phase 3: Landing page complete (6 sections + nav).|
+| 2026-02-15 | Phase 3: Auth UI refinements (font visibility).   |

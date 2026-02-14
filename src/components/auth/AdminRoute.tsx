@@ -34,7 +34,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
                     global: { headers: { Authorization: `Bearer ${token}` } }
                 })
 
-                const { data, error } = await client
+                const { data } = await client
                     .from('profiles')
                     .select('role')
                     .eq('clerk_user_id', user.id)

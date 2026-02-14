@@ -4,15 +4,16 @@ import SignInPage from './pages/auth/SignInPage'
 import SignUpPage from './pages/auth/SignUpPage'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import AdminRoute from './components/auth/AdminRoute'
-import DashboardLayout from './layouts/DashboardLayout'
+import { DashboardLayout } from './layouts/DashboardLayout'
+import { CreateHabitForm } from './components/dashboard/CreateHabitForm'
 
-function Dashboard() {
+function DashboardHome() {
   return (
     <div className="flex items-center justify-center h-full">
       <div className="text-center">
         <h1 className="text-3xl font-bold text-text-primary font-satoshi mb-4">Dashboard</h1>
         <p className="text-text-secondary">Welcome to your habit tracking dashboard.</p>
-        <p className="text-text-muted mt-2">Habit tracking features coming in Phase 5.</p>
+        <p className="text-text-muted mt-2">Habit tracking features coming soon.</p>
       </div>
     </div>
   )
@@ -30,6 +31,19 @@ function Admin() {
   )
 }
 
+function DashboardRoutes() {
+  return (
+    <ProtectedRoute>
+      <DashboardLayout>
+        <Routes>
+          <Route index element={<DashboardHome />} />
+          <Route path="habits/new" element={<CreateHabitForm />} />
+        </Routes>
+      </DashboardLayout>
+    </ProtectedRoute>
+  )
+}
+
 export function AppRoutes() {
   return (
     <Routes>
@@ -37,16 +51,7 @@ export function AppRoutes() {
       <Route path="/sign-in/*" element={<SignInPage />} />
       <Route path="/sign-up/*" element={<SignUpPage />} />
 
-      <Route
-        path="/dashboard/*"
-        element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <Dashboard />
-            </DashboardLayout>
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/dashboard/*" element={<DashboardRoutes />} />
 
       <Route
         path="/admin/*"

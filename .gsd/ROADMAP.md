@@ -61,8 +61,8 @@
 ### Phase 5: USER DASHBOARD
 > Core habit tracking: CRUD, toggle, calendar, streaks.
 
-- [ ] Dashboard layout (sidebar + content area)
-- [ ] Create habit form (name, description, color, icon, frequency)
+- [x] Dashboard layout (sidebar + content area)
+- [x] Create habit form (name, description, color, icon, frequency)
 - [ ] Habit list with edit/delete
 - [ ] Daily completion toggle
 - [ ] Calendar heatmap view
@@ -106,6 +106,6 @@
 | 2     | Scaffolding    | ✅ Complete |
 | 3     | Landing Page   | ✅ Complete |
 | 4     | Authentication | ✅ Complete |
-| 5     | User Dashboard | ⬜ Next     |
+| 5     | User Dashboard | 🟡 Active   |
 | 6     | Admin Dashboard| ⬜ Blocked  |
 | 7     | Polish & Deploy| ⬜ Blocked  |

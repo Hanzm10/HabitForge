@@ -30,6 +30,8 @@ export default function SignUpPage() {
                         formFieldInput: "bg-bg-secondary border-border-subtle text-text-primary placeholder:text-text-secondary",
                         footerActionLink: "text-accent-primary hover:text-accent-hover",
                         formButtonPrimary: "bg-accent-primary hover:bg-accent-hover text-white",
+                        formFieldSuccessText: "text-success",
+                        formFieldSuccessText__password: "text-success",
                     }
                 }}
             />

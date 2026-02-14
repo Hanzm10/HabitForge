@@ -11,12 +11,12 @@ vi.mock('@clerk/clerk-react', () => ({
 }))
 
 // Mock Supabase createClient
-const mockUpsert = vi.fn(() => ({ error: null }))
+const mockUpsert = vi.fn(() => ({ error: null, data: null }))
 const mockFrom = vi.fn(() => ({ upsert: mockUpsert }))
-const mockCreateClient = vi.fn(() => ({ from: mockFrom }))
+const mockCreateClient = vi.fn((..._args: any[]) => ({ from: mockFrom }))
 
 vi.mock('@supabase/supabase-js', () => ({
-    createClient: (...args: any[]) => mockCreateClient(...args),
+    createClient: (url: string, key: string, options: any) => mockCreateClient(url, key, options),
 }))
 
 describe('useProfileSync', () => {

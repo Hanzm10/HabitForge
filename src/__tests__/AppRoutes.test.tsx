@@ -7,7 +7,7 @@ import { AppRoutes } from '../App'
 vi.mock('../pages/LandingPage', () => ({ default: () => <div>Landing Page</div> }))
 vi.mock('../pages/auth/SignInPage', () => ({ default: () => <div>Sign In Page</div> }))
 vi.mock('../pages/auth/SignUpPage', () => ({ default: () => <div>Sign Up Page</div> }))
-vi.mock('../layouts/DashboardLayout', () => ({ default: ({ children }: { children: any }) => <div>Dashboard Layout {children}</div> }))
+vi.mock('../layouts/DashboardLayout', () => ({ DashboardLayout: ({ children }: { children: any }) => <div>Dashboard Layout {children}</div> }))
 
 // Mock Auth Guards
 // We need to allow them to render children based on props or context, but since they rely on useUser/useProfileSync,
@@ -25,11 +25,12 @@ vi.mock('@clerk/clerk-react', () => ({
 }))
 
 // Mock Supabase for AdminRoute
+// Mock Supabase for AdminRoute
 const mockSingle = vi.fn()
 const mockEq = vi.fn(() => ({ single: mockSingle }))
 const mockSelect = vi.fn(() => ({ eq: mockEq }))
 const mockFrom = vi.fn(() => ({ select: mockSelect }))
-const mockCreateClient = vi.fn(() => ({ from: mockFrom }))
+const mockCreateClient = vi.fn((..._args: any[]) => ({ from: mockFrom }))
 
 vi.mock('@supabase/supabase-js', () => ({
     createClient: (...args: any[]) => mockCreateClient(...args),

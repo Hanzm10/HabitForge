@@ -17,10 +17,10 @@ const mockSingle = vi.fn()
 const mockEq = vi.fn(() => ({ single: mockSingle }))
 const mockSelect = vi.fn(() => ({ eq: mockEq }))
 const mockFrom = vi.fn(() => ({ select: mockSelect }))
-const mockCreateClient = vi.fn(() => ({ from: mockFrom }))
+const mockCreateClient = vi.fn((..._args: any[]) => ({ from: mockFrom }))
 
 vi.mock('@supabase/supabase-js', () => ({
-    createClient: (...args: any[]) => mockCreateClient(...args),
+    createClient: (url: string, key: string, options: any) => mockCreateClient(url, key, options),
 }))
 
 describe('AdminRoute', () => {

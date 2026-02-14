@@ -1,0 +1,38 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90mC:/Users/Hanz Mapua/Workspace/HabitForge[39m
+
+ [31m×[39m src/layouts/DashboardLayout.test.tsx[2m > [22mDashboardLayout[2m > [22mrenders the sidebar with navigation links[32m 14[2mms[22m[39m
+[31m   → @clerk/clerk-react: The publishableKey passed to Clerk is invalid. You can get your Publishable key at https://dashboard.clerk.com/last-active?path=api-keys. (key=pk_test_mock)[39m
+ [31m×[39m src/layouts/DashboardLayout.test.tsx[2m > [22mDashboardLayout[2m > [22mrenders the user button[32m 2[2mms[22m[39m
+[31m   → @clerk/clerk-react: The publishableKey passed to Clerk is invalid. You can get your Publishable key at https://dashboard.clerk.com/last-active?path=api-keys. (key=pk_test_mock)[39m
+ [31m×[39m src/layouts/DashboardLayout.test.tsx[2m > [22mDashboardLayout[2m > [22mrenders children content[32m 2[2mms[22m[39m
+[31m   → @clerk/clerk-react: The publishableKey passed to Clerk is invalid. You can get your Publishable key at https://dashboard.clerk.com/last-active?path=api-keys. (key=pk_test_mock)[39m
+ [31m×[39m src/layouts/DashboardLayout.test.tsx[2m > [22mDashboardLayout[2m > [22mtoggles mobile menu[32m 2[2mms[22m[39m
+[31m   → @clerk/clerk-react: The publishableKey passed to Clerk is invalid. You can get your Publishable key at https://dashboard.clerk.com/last-active?path=api-keys. (key=pk_test_mock)[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/layouts/DashboardLayout.test.tsx[2m > [22mDashboardLayout[2m > [22mrenders the sidebar with navigation links
+[41m[1m FAIL [22m[49m src/layouts/DashboardLayout.test.tsx[2m > [22mDashboardLayout[2m > [22mrenders the user button
+[41m[1m FAIL [22m[49m src/layouts/DashboardLayout.test.tsx[2m > [22mDashboardLayout[2m > [22mrenders children content
+[41m[1m FAIL [22m[49m src/layouts/DashboardLayout.test.tsx[2m > [22mDashboardLayout[2m > [22mtoggles mobile menu
+[31m[1mError[22m: @clerk/clerk-react: The publishableKey passed to Clerk is invalid. You can get your Publishable key at https://dashboard.clerk.com/last-active?path=api-keys. (key=pk_test_mock)[39m
+[90m [2m❯[22m Object.throwInvalidPublishableKeyError ../../../Hanz%20Mapua/Workspace/HabitForge/node_modules/@clerk/shared/dist/runtime/error-Dl9xmUf3.mjs:[2m276:10[22m[39m
+[90m [2m❯[22m ClerkProviderBase ../../../Hanz%20Mapua/Workspace/HabitForge/node_modules/@clerk/clerk-react/dist/index.mjs:[2m1934:20[22m[39m
+[90m [2m❯[22m Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:[2m25904:20[22m[39m
+[90m [2m❯[22m renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:[2m7662:22[22m[39m
+[90m [2m❯[22m updateFunctionComponent node_modules/react-dom/cjs/react-dom-client.development.js:[2m10166:19[22m[39m
+[90m [2m❯[22m beginWork node_modules/react-dom/cjs/react-dom-client.development.js:[2m11778:18[22m[39m
+[90m [2m❯[22m runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:[2m874:13[22m[39m
+[90m [2m❯[22m performUnitOfWork node_modules/react-dom/cjs/react-dom-client.development.js:[2m17641:22[22m[39m
+[90m [2m❯[22m workLoopSync node_modules/react-dom/cjs/react-dom-client.development.js:[2m17469:41[22m[39m
+[90m [2m❯[22m renderRootSync node_modules/react-dom/cjs/react-dom-client.development.js:[2m17450:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[90m (4)[39m
+[2m   Start at [22m 01:25:18
+[2m   Duration [22m 1.53s[2m (transform 88ms, setup 122ms, import 317ms, tests 21ms, environment 874ms)[22m
+

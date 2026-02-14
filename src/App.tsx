@@ -6,18 +6,8 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 import AdminRoute from './components/auth/AdminRoute'
 import { DashboardLayout } from './layouts/DashboardLayout'
 import { CreateHabitForm } from './components/dashboard/CreateHabitForm'
-
-function DashboardHome() {
-  return (
-    <div className="flex items-center justify-center h-full">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-text-primary font-satoshi mb-4">Dashboard</h1>
-        <p className="text-text-secondary">Welcome to your habit tracking dashboard.</p>
-        <p className="text-text-muted mt-2">Habit tracking features coming soon.</p>
-      </div>
-    </div>
-  )
-}
+import { HabitList } from './components/dashboard/HabitList'
+import { EditHabitForm } from './components/dashboard/EditHabitForm'
 
 function Admin() {
   return (
@@ -36,8 +26,10 @@ function DashboardRoutes() {
     <ProtectedRoute>
       <DashboardLayout>
         <Routes>
-          <Route index element={<DashboardHome />} />
+          <Route index element={<HabitList />} />
+          <Route path="habits" element={<HabitList />} />
           <Route path="habits/new" element={<CreateHabitForm />} />
+          <Route path="habits/:habitId/edit" element={<EditHabitForm />} />
         </Routes>
       </DashboardLayout>
     </ProtectedRoute>

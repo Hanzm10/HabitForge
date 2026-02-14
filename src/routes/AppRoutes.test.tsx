@@ -39,6 +39,19 @@ vi.mock('../layouts/DashboardLayout', () => ({
     ),
 }));
 
+// Mock useHabits for HabitList component
+vi.mock('../hooks/useHabits', () => ({
+    useHabits: () => ({
+        habits: [],
+        fetchHabits: vi.fn().mockResolvedValue(undefined),
+        deleteHabit: vi.fn(),
+        createHabit: vi.fn(),
+        updateHabit: vi.fn(),
+        isLoading: false,
+        error: null,
+    }),
+}));
+
 describe('AppRoutes Integration', () => {
     it('renders landing page on root route', () => {
         render(
@@ -46,10 +59,6 @@ describe('AppRoutes Integration', () => {
                 <AppRoutes />
             </MemoryRouter>
         );
-        // Landing page content (mock or real) - checking for something known on Landing Page
-        // Assuming Landing Page has a "HabitForge" text or similar. 
-        // Since we are not mocking LandingPage, it will render. 
-        // Let's check for a known element from LandingPage or just that DashboardLayout is NOT present.
         expect(screen.queryByTestId('dashboard-layout')).not.toBeInTheDocument();
     });
 
@@ -63,9 +72,8 @@ describe('AppRoutes Integration', () => {
         expect(screen.getByTestId('dashboard-layout')).toBeInTheDocument();
         expect(screen.getByText('Sidebar')).toBeInTheDocument();
         expect(screen.getByText('Header')).toBeInTheDocument();
-        // Check for Dashboard content
-        expect(screen.getByText('Dashboard')).toBeInTheDocument();
-        expect(screen.getByText('Welcome to your habit tracking dashboard.')).toBeInTheDocument();
+        // HabitList renders empty state on dashboard index
+        expect(screen.getByText(/no habits yet/i)).toBeInTheDocument();
     });
 
     it('renders DashboardLayout on /admin route', () => {

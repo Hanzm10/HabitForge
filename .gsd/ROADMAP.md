@@ -63,7 +63,7 @@
 
 - [x] Dashboard layout (sidebar + content area)
 - [x] Create habit form (name, description, color, icon, frequency)
-- [ ] Habit list with edit/delete
+- [x] Habit list with edit/delete
 - [ ] Daily completion toggle
 - [ ] Calendar heatmap view
 - [ ] Streak counter (current + longest)

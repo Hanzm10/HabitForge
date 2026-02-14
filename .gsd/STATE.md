@@ -16,11 +16,12 @@
 - Clerk provider integrated & Auth pages implemented
 - Protected Routes & Admin Guard active
 - User Profile Sync hook implemented
-- Vitest + React Testing Library configured (59 passing tests)
+- Vitest + React Testing Library configured (82 passing tests)
 - Landing page complete (6 sections, navbar, animations, SEO)
 - Dashboard layout (sidebar + header + nested routes)
 - Create Habit Form (name, desc, color, icon, frequency)
-- useHabits hook (Clerk auth → Supabase insert)
+- useHabits hook (Clerk auth → Supabase insert/fetch/update/delete)
+- Habit list with edit/delete (HabitList + EditHabitForm)
 
 ## Key Facts
 - **Supabase Project:** `qltyzyktalhrmsqcyebp` (ap-southeast-1, ACTIVE_HEALTHY, $0/mo)
@@ -53,4 +54,5 @@
 | 2026-02-15 | Phase 3: Auth UI refinements (font visibility).   |
 | 2026-02-15 | Phase 5: Create Habit Form + useHabits hook (TDD). |
 | 2026-02-15 | Phase 5: 19 test files, 59 tests (all GREEN).    |
+| 2026-02-15 | Phase 5: Habit list + edit/delete (TDD, 82 tests).|
 

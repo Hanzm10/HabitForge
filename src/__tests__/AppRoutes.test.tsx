@@ -9,11 +9,6 @@ vi.mock('../pages/auth/SignInPage', () => ({ default: () => <div>Sign In Page</d
 vi.mock('../pages/auth/SignUpPage', () => ({ default: () => <div>Sign Up Page</div> }))
 vi.mock('../layouts/DashboardLayout', () => ({ DashboardLayout: ({ children }: { children: any }) => <div>Dashboard Layout {children}</div> }))
 
-// Mock Auth Guards
-// We need to allow them to render children based on props or context, but since they rely on useUser/useProfileSync,
-// we should probably mock the HOOKS they use, OR mock the components themselves if we want shallow testing.
-// Integration testing the guards is better.
-
 // Mock Clerk
 const mockUseUser = vi.fn()
 const mockUseAuth = vi.fn()
@@ -24,7 +19,6 @@ vi.mock('@clerk/clerk-react', () => ({
     RedirectToSignIn: () => <div>Redirecting to Sign In...</div>,
 }))
 
-// Mock Supabase for AdminRoute
 // Mock Supabase for AdminRoute
 const mockSingle = vi.fn()
 const mockEq = vi.fn(() => ({ single: mockSingle }))
@@ -39,6 +33,19 @@ vi.mock('@supabase/supabase-js', () => ({
 // Mock useProfileSync (DashboardLayout uses it)
 vi.mock('../hooks/useProfileSync', () => ({
     useProfileSync: vi.fn(),
+}))
+
+// Mock useHabits for HabitList component
+vi.mock('../hooks/useHabits', () => ({
+    useHabits: () => ({
+        habits: [],
+        fetchHabits: vi.fn().mockResolvedValue(undefined),
+        deleteHabit: vi.fn(),
+        createHabit: vi.fn(),
+        updateHabit: vi.fn(),
+        isLoading: false,
+        error: null,
+    }),
 }))
 
 describe('AppRoutes', () => {
@@ -65,10 +72,10 @@ describe('AppRoutes', () => {
             </MemoryRouter>
         )
 
-        // ProtectedRoute -> DashboardLayout -> Dashboard
+        // ProtectedRoute -> DashboardLayout -> HabitList (empty state)
         await waitFor(() => {
             expect(screen.getByText(/Dashboard Layout/)).toBeInTheDocument()
-            expect(screen.getByRole('heading', { name: 'Dashboard' })).toBeInTheDocument()
+            expect(screen.getByText(/no habits yet/i)).toBeInTheDocument()
         })
     })
 

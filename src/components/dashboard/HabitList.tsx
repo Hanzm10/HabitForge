@@ -8,6 +8,7 @@ import { HabitHeatmap } from './HabitHeatmap';
 import { StreakCounter } from './StreakCounter';
 import { CompletionRate } from './CompletionRate';
 import { useStreaks } from '../../hooks/useStreaks';
+import { WeeklyProgressCard } from './WeeklyProgressCard';
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
@@ -95,6 +96,10 @@ export const HabitList = () => {
                     year={selectedYear}
                     onYearChange={setSelectedYear}
                 />
+            </div>
+
+            <div className="mb-8">
+                <WeeklyProgressCard />
             </div>
 
             <div className="flex items-center justify-between mb-6">

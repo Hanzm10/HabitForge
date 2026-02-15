@@ -4,6 +4,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { HabitList } from './HabitList.tsx';
 import { MemoryRouter } from 'react-router-dom';
 
+vi.mock('./WeeklyProgressCard', () => ({
+    WeeklyProgressCard: () => <div data-testid="weekly-progress-mock">WP_MOCK</div>,
+}));
+
 // Mock useHabits hook
 const mockFetchHabits = vi.fn();
 const mockDeleteHabit = vi.fn();
@@ -63,6 +67,7 @@ vi.mock('../../hooks/useCompletions', () => ({
         error: null,
     }),
 }));
+
 
 const renderList = () => {
     return render(

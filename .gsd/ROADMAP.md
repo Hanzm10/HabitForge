@@ -68,8 +68,8 @@
 - [x] Calendar heatmap view
 - [x] Streak counter (current + longest)
 - [x] Completion rate % per habit
-- [ ] Weekly progress overview card
-- [ ] Verify: CRUD operations work, streak calculation correct, calendar renders
+- [x] Weekly progress overview card
+- [x] Verify: CRUD operations work, streak calculation correct, calendar renders, weekly progress updates
 
 ---
 

@@ -22,9 +22,6 @@ describe('useWeeklyProgress', () => {
     // Mock Supabase client methods
     const mockSelect = vi.fn();
     const mockEq = vi.fn();
-    const mockIn = vi.fn();
-    const mockGte = vi.fn();
-    const mockLte = vi.fn();
     const mockSingle = vi.fn();
 
     const mockSupabase: any = {

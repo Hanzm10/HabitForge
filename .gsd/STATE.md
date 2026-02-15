@@ -63,4 +63,6 @@
 | 2026-02-15 | Phase 5: Calendar heatmap view (TDD, 104 tests). |
 | 2026-02-15 | Phase 5: Icon Picker component + integration (TDD). |
 | 2026-02-15 | Bugfix: Integrated `useProfileSync` into `ProtectedRoute`. |
+| 2026-02-15 | Phase 6: Admin Dashboard Analytics — KPI cards + RLS (TDD). |
+| 2026-02-15 | Phase 5: User Settings Page — Clerk integration + Theming. |
 

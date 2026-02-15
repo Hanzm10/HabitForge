@@ -8,18 +8,9 @@ import { DashboardLayout } from './layouts/DashboardLayout'
 import { CreateHabitForm } from './components/dashboard/CreateHabitForm'
 import { HabitList } from './components/dashboard/HabitList'
 import { EditHabitForm } from './components/dashboard/EditHabitForm'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import SettingsPage from './pages/dashboard/SettingsPage'
 
-function Admin() {
-  return (
-    <div className="flex items-center justify-center h-full">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-text-primary font-satoshi mb-4">Admin Console</h1>
-        <p className="text-text-secondary">User analytics and management.</p>
-        <p className="text-text-muted mt-2">Analytics features coming in Phase 6.</p>
-      </div>
-    </div>
-  )
-}
 
 function DashboardRoutes() {
   return (
@@ -30,6 +21,7 @@ function DashboardRoutes() {
           <Route path="habits" element={<HabitList showOverview={false} />} />
           <Route path="habits/new" element={<CreateHabitForm />} />
           <Route path="habits/:habitId/edit" element={<EditHabitForm />} />
+          <Route path="settings" element={<SettingsPage />} />
         </Routes>
       </DashboardLayout>
     </ProtectedRoute>
@@ -50,7 +42,7 @@ export function AppRoutes() {
         element={
           <AdminRoute>
             <DashboardLayout>
-              <Admin />
+              <AdminDashboard />
             </DashboardLayout>
           </AdminRoute>
         }

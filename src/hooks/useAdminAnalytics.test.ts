@@ -1,0 +1,116 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
+import { useAdminAnalytics } from './useAdminAnalytics';
+
+// Mock Clerk hooks
+const mockGetToken = vi.fn().mockResolvedValue('mock-jwt-token');
+vi.mock('@clerk/clerk-react', () => ({
+    useAuth: () => ({
+        getToken: mockGetToken,
+    }),
+    useUser: () => ({
+        user: { id: 'admin_user_123' },
+        isLoaded: true,
+        isSignedIn: true,
+    }),
+}));
+
+// Mock Supabase client
+const mockFrom = vi.fn();
+
+vi.mock('@supabase/supabase-js', () => ({
+    createClient: () => ({
+        from: mockFrom,
+    }),
+}));
+
+describe('useAdminAnalytics', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
+    const createMockQuery = (response: any) => {
+        const query: any = {
+            gte: vi.fn().mockReturnThis(),
+            then: vi.fn().mockImplementation((fn) => Promise.resolve(response).then(fn)),
+        };
+        // Ensure gte returns a promise that resolves to the response when awaited
+        query.gte.mockImplementation(() => query);
+        return query;
+    };
+
+    it('fetches total users, new users, and DAU/MAU', async () => {
+        const mockCounts = [100, 10, 30, 40, 80, 200, 500];
+        let callIndex = 0;
+
+        mockFrom.mockImplementation(() => ({
+            select: vi.fn().mockImplementation(() => {
+                const response = { count: mockCounts[callIndex++], error: null };
+                return createMockQuery(response);
+            })
+        }));
+
+        const { result } = renderHook(() => useAdminAnalytics());
+
+        await act(async () => {
+            await result.current.fetchAnalytics();
+        });
+
+        expect(result.current.analytics).toEqual({
+            totalUsers: 100,
+            newUsers7d: 10,
+            newUsers30d: 30,
+            dau: 40,
+            mau: 80,
+            avgHabits: 2.0,
+            avgCompletionRate: 0,
+        });
+    });
+
+    it('sets loading state correctly', async () => {
+        let resolveQuery: (value: any) => void;
+        const queryPromise = new Promise((resolve) => {
+            resolveQuery = resolve;
+        });
+
+        mockFrom.mockImplementation(() => ({
+            select: vi.fn().mockReturnValue({
+                gte: vi.fn().mockReturnThis(),
+                then: vi.fn().mockImplementation((fn) => queryPromise.then(fn))
+            })
+        }));
+
+        const { result } = renderHook(() => useAdminAnalytics());
+
+        let fetchPromise: Promise<void>;
+        act(() => {
+            fetchPromise = result.current.fetchAnalytics();
+        });
+
+        expect(result.current.isLoading).toBe(true);
+
+        await act(async () => {
+            resolveQuery!({ count: 10, error: null });
+            await fetchPromise;
+        });
+
+        expect(result.current.isLoading).toBe(false);
+    });
+
+    it('sets error when fetching fails', async () => {
+        mockFrom.mockImplementation(() => ({
+            select: vi.fn().mockReturnValue({
+                gte: vi.fn().mockReturnThis(),
+                then: vi.fn().mockImplementation((fn) => Promise.resolve({ count: null, error: { message: 'DB Error' } }).then(fn))
+            })
+        }));
+
+        const { result } = renderHook(() => useAdminAnalytics());
+
+        await act(async () => {
+            await result.current.fetchAnalytics();
+        });
+
+        expect(result.current.error).toBe('DB Error');
+    });
+});

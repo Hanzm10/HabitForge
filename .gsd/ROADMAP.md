@@ -76,8 +76,8 @@
 ### Phase 6: ADMIN DASHBOARD
 > Analytics, engagement metrics, user management.
 
-- [ ] Admin route guard (`role = 'admin'`)
-- [ ] User analytics cards (total, new 7/30d, DAU/MAU)
+- [x] Admin route guard (`role = 'admin'`)
+- [x] User analytics cards (total, new 7/30d, DAU/MAU)
 - [ ] Growth graph (users over time)
 - [ ] Engagement metrics (avg habits/user, avg completion rate, retention %)
 - [ ] User management table (view, suspend, change role)

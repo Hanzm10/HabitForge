@@ -26,8 +26,8 @@ function DashboardRoutes() {
     <ProtectedRoute>
       <DashboardLayout>
         <Routes>
-          <Route index element={<HabitList />} />
-          <Route path="habits" element={<HabitList />} />
+          <Route index element={<HabitList showOverview={true} />} />
+          <Route path="habits" element={<HabitList showOverview={false} />} />
           <Route path="habits/new" element={<CreateHabitForm />} />
           <Route path="habits/:habitId/edit" element={<EditHabitForm />} />
         </Routes>

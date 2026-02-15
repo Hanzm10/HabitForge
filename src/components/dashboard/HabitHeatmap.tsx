@@ -66,9 +66,9 @@ export const HabitHeatmap: React.FC<HabitHeatmapProps> = ({ history, isLoading, 
 
     const getIntensityClass = (count: number) => {
         if (count === 0) return 'bg-bg-secondary';
-        if (count <= 2) return 'bg-success/40';
-        if (count <= 4) return 'bg-success/70';
-        return 'bg-success';
+        if (count <= 2) return 'bg-accent-primary/30';
+        if (count <= 4) return 'bg-accent-primary/60';
+        return 'bg-accent-primary';
     };
 
     if (isLoading) {

@@ -12,7 +12,11 @@ import { WeeklyProgressCard } from './WeeklyProgressCard';
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
-export const HabitList = () => {
+interface HabitListProps {
+    showOverview?: boolean;
+}
+
+export const HabitList = ({ showOverview = true }: HabitListProps) => {
     const { habits, fetchHabits, deleteHabit, isLoading } = useHabits();
     const {
         completions,
@@ -88,22 +92,28 @@ export const HabitList = () => {
 
     return (
         <div>
-            {/* Activity Heatmap */}
-            <div className="mb-8">
-                <HabitHeatmap
-                    history={history}
-                    isLoading={isCompletionsLoading && !togglingHabitId}
-                    year={selectedYear}
-                    onYearChange={setSelectedYear}
-                />
-            </div>
+            {/* Activity Overview sections */}
+            {showOverview && (
+                <>
+                    <div className="mb-8">
+                        <HabitHeatmap
+                            history={history}
+                            isLoading={isCompletionsLoading && !togglingHabitId}
+                            year={selectedYear}
+                            onYearChange={setSelectedYear}
+                        />
+                    </div>
 
-            <div className="mb-8">
-                <WeeklyProgressCard />
-            </div>
+                    <div className="mb-8">
+                        <WeeklyProgressCard />
+                    </div>
+                </>
+            )}
 
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-bold text-text-primary">My Habits</h1>
+                <h1 className="text-2xl font-bold text-text-primary">
+                    {showOverview ? 'My Habits' : 'Manage Habits'}
+                </h1>
                 <Link
                     to="/dashboard/habits/new"
                     className="inline-flex items-center gap-2 px-4 py-2 bg-accent-primary text-white text-sm font-semibold rounded-lg transition-all duration-200 hover:bg-accent-hover shadow-lg shadow-accent-primary/25"

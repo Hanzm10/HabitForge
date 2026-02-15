@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { CompletionRate } from './CompletionRate';
 import * as useCompletionRateHook from '../../hooks/useCompletionRate';
@@ -13,16 +13,30 @@ describe('CompletionRate Component', () => {
         vi.clearAllMocks();
     });
 
-    it('should show placeholder initially', async () => {
+    it('should show placeholder during loading', async () => {
+        // Create a promise that stays pending
+        let resolveRate: (value: number) => void;
+        const ratePromise = new Promise<number>((resolve) => {
+            resolveRate = resolve;
+        });
+
         vi.mocked(useCompletionRateHook.useCompletionRate).mockReturnValue({
-            getRate: vi.fn().mockResolvedValue(75),
+            getRate: vi.fn().mockReturnValue(ratePromise),
             isLoading: true,
             error: null,
         });
 
-        render(<CompletionRate habitId="habit-1" createdAt={new Date().toISOString()} />);
+        await act(async () => {
+            render(<CompletionRate habitId="habit-1" createdAt={new Date().toISOString()} />);
+        });
+
         // It shows --% during loading when rate is null
         expect(screen.getByText(/--%/)).toBeInTheDocument();
+
+        // Cleanup: resolve the promise
+        await act(async () => {
+            resolveRate!(75);
+        });
     });
 
     it('should render the calculated rate', async () => {
@@ -32,7 +46,9 @@ describe('CompletionRate Component', () => {
             error: null,
         });
 
-        render(<CompletionRate habitId="habit-1" createdAt={new Date().toISOString()} />);
+        await act(async () => {
+            render(<CompletionRate habitId="habit-1" createdAt={new Date().toISOString()} />);
+        });
 
         await waitFor(() => {
             expect(screen.getByText(/75%/)).toBeInTheDocument();
@@ -46,7 +62,9 @@ describe('CompletionRate Component', () => {
             error: null,
         });
 
-        render(<CompletionRate habitId="habit-1" createdAt={new Date().toISOString()} />);
+        await act(async () => {
+            render(<CompletionRate habitId="habit-1" createdAt={new Date().toISOString()} />);
+        });
 
         await waitFor(() => {
             const rateElement = screen.getByText(/90%/);
@@ -61,7 +79,9 @@ describe('CompletionRate Component', () => {
             error: null,
         });
 
-        render(<CompletionRate habitId="habit-1" createdAt={new Date().toISOString()} />);
+        await act(async () => {
+            render(<CompletionRate habitId="habit-1" createdAt={new Date().toISOString()} />);
+        });
 
         await waitFor(() => {
             const rateElement = screen.getByText(/20%/);

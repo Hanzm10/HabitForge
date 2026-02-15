@@ -19,14 +19,17 @@ describe('HabitHeatmap', () => {
         expect(screen.getByTestId('heatmap-loading')).toBeInTheDocument();
     });
 
-    it('displays tooltips with correct format', () => {
+    it('displays tooltips with correct content', () => {
         const history = new Map<string, number>();
         const date = '2023-11-23';
         history.set(date, 5);
         render(<HabitHeatmap history={history} isLoading={false} year={2023} onYearChange={vi.fn()} />);
 
         const cell = document.querySelector(`[data-date="${date}"]`);
-        expect(cell).toHaveAttribute('title', '5 habits done on 2023-11-23');
+        expect(cell).toBeInTheDocument();
+        // The tooltip content is in the DOM even if hidden by CSS
+        expect(screen.getByText('5 habits')).toBeInTheDocument();
+        expect(screen.getByText('Nov 23, 2023')).toBeInTheDocument();
     });
 
     it('renders month labels', () => {

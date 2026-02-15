@@ -1,6 +1,7 @@
 
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, CheckCircle, Settings, X } from 'lucide-react';
+import { LayoutDashboard, CheckCircle, Settings, X, Shield } from 'lucide-react';
+import { useAdmin } from '../../hooks/useAdmin';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -9,12 +10,17 @@ interface SidebarProps {
 
 export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     const location = useLocation();
+    const { isAdmin } = useAdmin();
 
     const links = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
         { name: 'Habits', path: '/dashboard/habits', icon: CheckCircle },
         { name: 'Settings', path: '/dashboard/settings', icon: Settings },
     ];
+
+    if (isAdmin) {
+        links.unshift({ name: 'Admin', path: '/admin', icon: Shield });
+    }
 
     return (
         <>

@@ -32,10 +32,12 @@ describe('useAdminAnalytics', () => {
     const createMockQuery = (response: any) => {
         const query: any = {
             gte: vi.fn().mockReturnThis(),
+            order: vi.fn().mockReturnThis(),
             then: vi.fn().mockImplementation((fn) => Promise.resolve(response).then(fn)),
         };
-        // Ensure gte returns a promise that resolves to the response when awaited
+        // Ensure gte and order return the query object
         query.gte.mockImplementation(() => query);
+        query.order.mockImplementation(() => query);
         return query;
     };
 
@@ -43,9 +45,19 @@ describe('useAdminAnalytics', () => {
         const mockCounts = [100, 10, 30, 40, 80, 200, 500];
         let callIndex = 0;
 
-        mockFrom.mockImplementation(() => ({
-            select: vi.fn().mockImplementation(() => {
-                const response = { count: mockCounts[callIndex++], error: null };
+        mockFrom.mockImplementation((table) => ({
+            select: vi.fn().mockImplementation((columns) => {
+                // If the query includes 'created_at' and uses order, it's the growth data query
+                if (columns === 'created_at') {
+                    const response = {
+                        data: [{ created_at: new Date().toISOString() }],
+                        error: null
+                    };
+                    return createMockQuery(response);
+                }
+
+                // Otherwise it's one of the count queries
+                const response = { count: mockCounts[callIndex++] || 0, error: null };
                 return createMockQuery(response);
             })
         }));
@@ -64,7 +76,14 @@ describe('useAdminAnalytics', () => {
             mau: 80,
             avgHabits: 2.0,
             avgCompletionRate: 0,
+            growthData: expect.any(Array),
         });
+
+        // Verify growthData structure
+        const growth = result.current.analytics?.growthData;
+        expect(growth?.length).toBeGreaterThan(0);
+        expect(growth?.[0]).toHaveProperty('date');
+        expect(growth?.[0]).toHaveProperty('count');
     });
 
     it('sets loading state correctly', async () => {
@@ -74,9 +93,10 @@ describe('useAdminAnalytics', () => {
         });
 
         mockFrom.mockImplementation(() => ({
-            select: vi.fn().mockReturnValue({
-                gte: vi.fn().mockReturnThis(),
-                then: vi.fn().mockImplementation((fn) => queryPromise.then(fn))
+            select: vi.fn().mockImplementation(() => {
+                const query = createMockQuery({ count: 10, error: null });
+                query.then = vi.fn().mockImplementation((fn) => queryPromise.then(fn));
+                return query;
             })
         }));
 
@@ -99,9 +119,8 @@ describe('useAdminAnalytics', () => {
 
     it('sets error when fetching fails', async () => {
         mockFrom.mockImplementation(() => ({
-            select: vi.fn().mockReturnValue({
-                gte: vi.fn().mockReturnThis(),
-                then: vi.fn().mockImplementation((fn) => Promise.resolve({ count: null, error: { message: 'DB Error' } }).then(fn))
+            select: vi.fn().mockImplementation(() => {
+                return createMockQuery({ count: null, error: { message: 'DB Error' } });
             })
         }));
 

@@ -78,7 +78,7 @@
 
 - [x] Admin route guard (`role = 'admin'`)
 - [x] User analytics cards (total, new 7/30d, DAU/MAU)
-- [ ] Growth graph (users over time)
+- [x] Growth graph (users over time)
 - [ ] Engagement metrics (avg habits/user, avg completion rate, retention %)
 - [ ] User management table (view, suspend, change role)
 - [ ] Verify: Admin-only access enforced, metrics compute from real data

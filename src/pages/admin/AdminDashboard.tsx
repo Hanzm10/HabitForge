@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useAdminAnalytics } from '../../hooks/useAdminAnalytics';
 import { AnalyticsCard } from '../../components/admin/AnalyticsCard';
+import { GrowthGraph } from '../../components/admin/GrowthGraph';
 
 export default function AdminDashboard() {
     const { analytics, isLoading, error, fetchAnalytics } = useAdminAnalytics();
@@ -84,6 +85,11 @@ export default function AdminDashboard() {
                     icon={UserPlus}
                     description="Joined in last 7 days"
                 />
+            </div>
+
+            {/* Growth Visualization */}
+            <div className="mb-10">
+                <GrowthGraph />
             </div>
 
             {/* Secondary Metrics */}

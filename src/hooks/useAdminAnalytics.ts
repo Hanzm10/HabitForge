@@ -10,6 +10,7 @@ export interface AdminAnalytics {
     mau: number;
     avgHabits: number;
     avgCompletionRate: number;
+    growthData: { date: string; count: number }[];
 }
 
 export function useAdminAnalytics() {
@@ -43,6 +44,7 @@ export function useAdminAnalytics() {
             const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
 
             // Run queries in parallel
+            // Note: For growthData, we'll fetch profiles from last 30 days to group them
             const [
                 totalRes,
                 new7dRes,
@@ -50,7 +52,8 @@ export function useAdminAnalytics() {
                 dauRes,
                 mauRes,
                 habitsRes,
-                completionsRes
+                completionsRes,
+                growthRes
             ] = await Promise.all([
                 supabase.from('profiles').select('*', { count: 'exact', head: true }),
                 supabase.from('profiles').select('*', { count: 'exact', head: true }).gte('created_at', sevenDaysAgo),
@@ -58,11 +61,12 @@ export function useAdminAnalytics() {
                 supabase.from('profiles').select('*', { count: 'exact', head: true }).gte('updated_at', twentyFourHoursAgo),
                 supabase.from('profiles').select('*', { count: 'exact', head: true }).gte('updated_at', thirtyDaysAgo),
                 supabase.from('habits').select('*', { count: 'exact', head: true }),
-                supabase.from('habit_completions').select('*', { count: 'exact', head: true })
+                supabase.from('habit_completions').select('*', { count: 'exact', head: true }),
+                supabase.from('profiles').select('created_at').order('created_at', { ascending: true }).gte('created_at', thirtyDaysAgo)
             ]);
 
             // Check for errors
-            const errors = [totalRes, new7dRes, new30dRes, dauRes, mauRes, habitsRes, completionsRes]
+            const errors = [totalRes, new7dRes, new30dRes, dauRes, mauRes, habitsRes, completionsRes, growthRes]
                 .filter(res => res.error)
                 .map(res => res.error?.message);
 
@@ -73,6 +77,29 @@ export function useAdminAnalytics() {
             const totalUsers = totalRes.count || 0;
             const avgHabits = totalUsers > 0 ? (habitsRes.count || 0) / totalUsers : 0;
 
+            // Process growth data (group by day)
+            const growthMap = new Map<string, number>();
+
+            // Initialize last 30 days with 0
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+                const dateStr = date.toISOString().split('T')[0];
+                growthMap.set(dateStr, 0);
+            }
+
+            // Fill with real data
+            growthRes.data?.forEach(profile => {
+                const dateStr = profile.created_at.split('T')[0];
+                if (growthMap.has(dateStr)) {
+                    growthMap.set(dateStr, (growthMap.get(dateStr) || 0) + 1);
+                }
+            });
+
+            const growthData = Array.from(growthMap.entries()).map(([date, count]) => ({
+                date,
+                count
+            }));
+
             setAnalytics({
                 totalUsers,
                 newUsers7d: new7dRes.count || 0,
@@ -80,7 +107,8 @@ export function useAdminAnalytics() {
                 dau: dauRes.count || 0,
                 mau: mauRes.count || 0,
                 avgHabits: parseFloat(avgHabits.toFixed(1)),
-                avgCompletionRate: 0 // Placeholder for now
+                avgCompletionRate: 0, // Placeholder for now
+                growthData
             });
         } catch (err: any) {
             console.error('Failed to fetch admin analytics:', err);

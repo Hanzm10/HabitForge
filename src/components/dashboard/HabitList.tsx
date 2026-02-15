@@ -6,6 +6,7 @@ import { useCompletions } from '../../hooks/useCompletions';
 import { DailyToggle } from './DailyToggle';
 import { HabitHeatmap } from './HabitHeatmap';
 import { StreakCounter } from './StreakCounter';
+import { CompletionRate } from './CompletionRate';
 import { useStreaks } from '../../hooks/useStreaks';
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
@@ -142,11 +143,17 @@ export const HabitList = () => {
 
                         {/* Streak Counter */}
                         {streaks.has(habit.id) && (
-                            <StreakCounter
-                                current={streaks.get(habit.id)?.current || 0}
-                                longest={streaks.get(habit.id)?.longest || 0}
-                                className="hidden sm:flex"
-                            />
+                            <div className="hidden sm:flex items-center gap-3">
+                                <StreakCounter
+                                    current={streaks.get(habit.id)?.current || 0}
+                                    longest={streaks.get(habit.id)?.longest || 0}
+                                />
+                                <div className="w-px h-4 bg-border-subtle" />
+                                <CompletionRate
+                                    habitId={habit.id}
+                                    createdAt={habit.created_at}
+                                />
+                            </div>
                         )}
 
                         {/* Actions */}

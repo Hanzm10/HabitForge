@@ -1,9 +1,10 @@
 import { SignUp } from '@clerk/clerk-react'
 import { Link } from 'react-router-dom'
+import { PageTransition } from '../../components/ui/PageTransition'
 
 export default function SignUpPage() {
     return (
-        <div className="min-h-screen bg-bg-primary flex flex-col items-center justify-center p-4">
+        <PageTransition className="min-h-screen bg-bg-primary flex flex-col items-center justify-center p-4">
             <div className="mb-8 text-center">
                 <h1 className="text-3xl font-bold text-text-primary font-satoshi mb-2">
                     HabitForge
@@ -41,6 +42,6 @@ export default function SignUpPage() {
                     ← Back to HabitForge
                 </Link>
             </div>
-        </div>
+        </PageTransition>
     )
 }

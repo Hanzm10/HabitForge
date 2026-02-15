@@ -6,6 +6,7 @@ import { SocialProofSection } from '../components/landing/SocialProofSection'
 import { HowItWorksSection } from '../components/landing/HowItWorksSection'
 import { PricingSection } from '../components/landing/PricingSection'
 import { FooterSection } from '../components/landing/FooterSection'
+import { PageTransition } from '../components/ui/PageTransition'
 
 function Navbar() {
     return (
@@ -60,7 +61,7 @@ function Navbar() {
 
 export default function LandingPage() {
     return (
-        <div className="min-h-screen bg-bg-primary font-satoshi">
+        <PageTransition className="min-h-screen bg-bg-primary font-satoshi">
             <Navbar />
             <main className="pt-16">
                 <HeroSection />
@@ -70,6 +71,6 @@ export default function LandingPage() {
                 <PricingSection />
             </main>
             <FooterSection />
-        </div>
+        </PageTransition>
     )
 }

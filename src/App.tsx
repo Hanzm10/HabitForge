@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'motion/react'
 import LandingPage from './pages/LandingPage'
 import SignInPage from './pages/auth/SignInPage'
 import SignUpPage from './pages/auth/SignUpPage'
@@ -29,25 +30,29 @@ function DashboardRoutes() {
 }
 
 export function AppRoutes() {
+  const location = useLocation()
+
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/sign-in/*" element={<SignInPage />} />
-      <Route path="/sign-up/*" element={<SignUpPage />} />
+    <AnimatePresence mode="wait" initial={false}>
+      <Routes location={location} key={location.pathname.split('/')[1] || '/'}>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/sign-in/*" element={<SignInPage />} />
+        <Route path="/sign-up/*" element={<SignUpPage />} />
 
-      <Route path="/dashboard/*" element={<DashboardRoutes />} />
+        <Route path="/dashboard/*" element={<DashboardRoutes />} />
 
-      <Route
-        path="/admin/*"
-        element={
-          <AdminRoute>
-            <DashboardLayout>
-              <AdminDashboard />
-            </DashboardLayout>
-          </AdminRoute>
-        }
-      />
-    </Routes>
+        <Route
+          path="/admin/*"
+          element={
+            <AdminRoute>
+              <DashboardLayout>
+                <AdminDashboard />
+              </DashboardLayout>
+            </AdminRoute>
+          }
+        />
+      </Routes>
+    </AnimatePresence>
   )
 }
 

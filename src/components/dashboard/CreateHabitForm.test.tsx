@@ -34,7 +34,7 @@ describe('CreateHabitForm', () => {
         expect(screen.getByLabelText(/habit name/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
         expect(screen.getByText('Color')).toBeInTheDocument();
-        expect(screen.getByLabelText(/icon/i)).toBeInTheDocument();
+        expect(screen.getByText('Icon')).toBeInTheDocument();
         expect(screen.getByText('Frequency')).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /create habit/i })).toBeInTheDocument();
     });
@@ -67,8 +67,9 @@ describe('CreateHabitForm', () => {
         // Fill description
         await user.type(screen.getByLabelText(/description/i), 'Run 5km every morning');
 
-        // Fill icon
-        await user.type(screen.getByLabelText(/icon/i), '🏃');
+        // Select icon (IconPicker)
+        const iconBtn = screen.getByText('🏃');
+        await user.click(iconBtn);
 
         // Submit
         const submitBtn = screen.getByRole('button', { name: /create habit/i });

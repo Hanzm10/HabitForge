@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useHabits } from '../../hooks/useHabits';
+import { IconPicker } from './IconPicker';
 
 const PRESET_COLORS = [
     '#6366F1', // Indigo
@@ -144,18 +145,7 @@ export const EditHabitForm = () => {
 
                 {/* Icon */}
                 <div>
-                    <label htmlFor="habit-icon" className="block text-sm font-medium text-text-secondary mb-2">
-                        Icon
-                    </label>
-                    <input
-                        id="habit-icon"
-                        type="text"
-                        value={icon}
-                        onChange={(e) => setIcon(e.target.value)}
-                        placeholder="Paste an emoji, e.g. 🏃"
-                        maxLength={4}
-                        className="w-24 px-4 py-3 bg-bg-secondary border border-border-subtle rounded-lg text-center text-2xl focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent transition-all"
-                    />
+                    <IconPicker value={icon} onChange={setIcon} />
                 </div>
 
                 {/* Frequency */}

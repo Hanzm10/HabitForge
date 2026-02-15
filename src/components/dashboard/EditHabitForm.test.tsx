@@ -67,7 +67,8 @@ describe('EditHabitForm', () => {
         await waitFor(() => {
             expect(screen.getByDisplayValue('Morning Run')).toBeInTheDocument();
             expect(screen.getByDisplayValue('Run 5km every morning')).toBeInTheDocument();
-            expect(screen.getByDisplayValue('🏃')).toBeInTheDocument();
+            const iconBtn = screen.getByText('🏃').closest('button');
+            expect(iconBtn).toHaveAttribute('aria-pressed', 'true');
         });
     });
 

@@ -24,6 +24,7 @@
 - Habit list with edit/delete (HabitList + EditHabitForm)
 - Daily completion toggle (useCompletions hook + DailyToggle component)
 - Calendar Heatmap (useCompletions history + HabitHeatmap component)
+- Icon Picker (reusable component + form integration)
 
 ## Key Facts
 - **Supabase Project:** `qltyzyktalhrmsqcyebp` (ap-southeast-1, ACTIVE_HEALTHY, $0/mo)
@@ -59,4 +60,5 @@
 | 2026-02-15 | Phase 5: Habit list + edit/delete (TDD, 82 tests).|
 | 2026-02-15 | Phase 5: Daily completion toggle (TDD, 93 tests). |
 | 2026-02-15 | Phase 5: Calendar heatmap view (TDD, 104 tests). |
+| 2026-02-15 | Phase 5: Icon Picker component + integration (TDD). |
 

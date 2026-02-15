@@ -7,11 +7,6 @@ import { DailyToggle } from './DailyToggle';
 import { HabitHeatmap } from './HabitHeatmap';
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
-const getOneYearAgoDate = () => {
-    const d = new Date();
-    d.setFullYear(d.getFullYear() - 1);
-    return d.toISOString().split('T')[0];
-};
 
 export const HabitList = () => {
     const { habits, fetchHabits, deleteHabit, isLoading } = useHabits();
@@ -23,13 +18,20 @@ export const HabitList = () => {
         toggleCompletion,
         isLoading: isCompletionsLoading
     } = useCompletions();
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [togglingHabitId, setTogglingHabitId] = useState<string | null>(null);
 
     useEffect(() => {
         fetchHabits();
         fetchCompletions(getTodayDate());
-        fetchHistory(getOneYearAgoDate(), getTodayDate());
-    }, [fetchHabits, fetchCompletions, fetchHistory]);
+    }, [fetchHabits, fetchCompletions]);
+
+    useEffect(() => {
+        // Fetch history for the selected year
+        const startDate = `${selectedYear}-01-01`;
+        const endDate = `${selectedYear}-12-31`;
+        fetchHistory(startDate, endDate);
+    }, [fetchHistory, selectedYear]);
 
     const handleToggle = async (habitId: string) => {
         setTogglingHabitId(habitId);
@@ -81,12 +83,12 @@ export const HabitList = () => {
         <div>
             {/* Activity Heatmap */}
             <div className="mb-8">
-                <h2 className="text-lg font-semibold text-text-primary mb-4 flex items-center gap-2">
-                    <span className="text-xl">🔥</span> Activity Overview
-                </h2>
-                <div className="bg-card border border-subtle rounded-xl p-1 overflow-hidden">
-                    <HabitHeatmap history={history} isLoading={isCompletionsLoading && !togglingHabitId} />
-                </div>
+                <HabitHeatmap
+                    history={history}
+                    isLoading={isCompletionsLoading && !togglingHabitId}
+                    year={selectedYear}
+                    onYearChange={setSelectedYear}
+                />
             </div>
 
             <div className="flex items-center justify-between mb-6">

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { HabitList } from './HabitList.tsx';
@@ -21,13 +21,17 @@ vi.mock('../../hooks/useHabits', () => ({
 }));
 
 // Mock HabitHeatmap
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('./HabitHeatmap', () => ({
-    HabitHeatmap: () => <div data-testid="habit-heatmap">Heatmap</div>,
-}));
-
-// Mock HabitHeatmap
-vi.mock('./HabitHeatmap', () => ({
-    HabitHeatmap: () => <div data-testid="habit-heatmap">Heatmap</div>,
+    HabitHeatmap: ({ year, onYearChange }: any) => (
+        <div data-testid="habit-heatmap">
+            Heatmap Year: {year}
+            <button onClick={() => {
+                console.log('Mock Heatmap: Clicked Prev Year. Current:', year);
+                onYearChange(year - 1);
+            }}>Prev Year</button>
+        </div>
+    ),
 }));
 
 // Mock useCompletions hook
@@ -104,7 +108,39 @@ describe('HabitList', () => {
     it('calls fetchHabits and fetchHistory on mount', () => {
         renderList();
         expect(mockFetchHabits).toHaveBeenCalledTimes(1);
-        expect(mockFetchHistory).toHaveBeenCalledTimes(1);
+        expect(mockFetchHistory).toHaveBeenCalledWith(
+            expect.stringContaining(new Date().getFullYear().toString()),
+            expect.stringContaining(new Date().getFullYear().toString())
+        );
+    });
+
+    it('fetches history when year changes', async () => {
+        mockHabitsData.mockReturnValue(sampleHabits);
+        renderList();
+        const user = userEvent.setup();
+        const currentYear = new Date().getFullYear();
+
+        // Initial fetch
+        await waitFor(() => {
+            expect(mockFetchHistory).toHaveBeenCalledWith(
+                `${currentYear}-01-01`,
+                `${currentYear}-12-31`
+            );
+        });
+
+        // Click previous year in mock heatmap
+        await waitFor(() => {
+            const prevBtn = screen.getByText('Prev Year');
+            fireEvent.click(prevBtn);
+        });
+
+        const prevYear = currentYear - 1;
+        await waitFor(() => {
+            expect(mockFetchHistory).toHaveBeenCalledWith(
+                `${prevYear}-01-01`,
+                `${prevYear}-12-31`
+            );
+        });
     });
 
     it('renders the heatmap when habits exist', async () => {

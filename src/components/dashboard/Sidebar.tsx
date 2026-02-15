@@ -20,7 +20,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         <>
             <div
                 data-testid="sidebar"
-                className={`fixed inset-y-0 left-0 z-50 w-64 bg-secondary border-r border-subtle transition-transform duration-300 ease-in-out transform ${isOpen ? 'translate-x-0' : '-translate-x-full'
+                className={`fixed inset-y-0 left-0 z-50 w-64 bg-bg-secondary border-r border-subtle transition-transform duration-300 ease-in-out transform ${isOpen ? 'translate-x-0' : '-translate-x-full'
                     } md:translate-x-0 md:static md:inset-0`}
             >
                 <div className="flex flex-col h-full">

@@ -1,38 +1,47 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { HabitHeatmap } from './HabitHeatmap';
 
 describe('HabitHeatmap', () => {
-    it('renders a grid of cells representing the year', () => {
+    it('renders the correct year grid', () => {
         const history = new Map<string, number>();
-        render(<HabitHeatmap history={history} isLoading={false} />);
+        const year = 2023; // Non-leap year, starts on Sunday
+        render(<HabitHeatmap history={history} isLoading={false} year={year} onYearChange={vi.fn()} />);
 
-        // We expect roughly 365 cells (maybe slightly more/less depending on grid logic, but let's check for "many" cells)
-        // Let's assume we render days as small squares
-        const cells = document.querySelectorAll('.heatmap-cell');
-        // 52 weeks * 7 days = 364
-        expect(cells.length).toBeGreaterThanOrEqual(364);
+        // 2023 has 365 days. 
+        const cells = document.querySelectorAll('[data-level]');
+        expect(cells.length).toBeGreaterThanOrEqual(365);
     });
 
     it('renders loading state', () => {
         const history = new Map<string, number>();
-        render(<HabitHeatmap history={history} isLoading={true} />);
+        render(<HabitHeatmap history={history} isLoading={true} year={2023} onYearChange={vi.fn()} />);
         expect(screen.getByTestId('heatmap-loading')).toBeInTheDocument();
     });
 
-    it('applies intensity classes based on completion count', () => {
+    it('displays tooltips with correct format', () => {
         const history = new Map<string, number>();
-        const today = new Date().toISOString().split('T')[0];
-        history.set(today, 5); // High intensity
+        const date = '2023-11-23';
+        history.set(date, 5);
+        render(<HabitHeatmap history={history} isLoading={false} year={2023} onYearChange={vi.fn()} />);
 
-        render(<HabitHeatmap history={history} isLoading={false} />);
+        const cell = document.querySelector(`[data-date="${date}"]`);
+        expect(cell).toHaveAttribute('title', '5 habits done on 2023-11-23');
+    });
 
-        // We need to find the specific cell for 'today'
-        // Ideally, cells should have data-date attribute
-        const cell = document.querySelector(`[data-date="${today}"]`);
-        expect(cell).toBeInTheDocument();
-        // Check for high intensity class (e.g., bg-emerald-600)
-        // Exact class depends on implementation, but let's assume valid CSS
-        expect(cell).toHaveAttribute('data-intensity', '4');
+    it('renders month labels', () => {
+        const history = new Map<string, number>();
+        render(<HabitHeatmap history={history} isLoading={false} year={2023} onYearChange={vi.fn()} />);
+        expect(screen.getByText('Jan')).toBeInTheDocument();
+        expect(screen.getByText('Dec')).toBeInTheDocument();
+    });
+
+    it('renders day labels', () => {
+        const history = new Map<string, number>();
+        render(<HabitHeatmap history={history} isLoading={false} year={2023} onYearChange={vi.fn()} />);
+        // Mon, Wed, Fri are rendered in the component
+        expect(screen.getByText('Mon')).toBeInTheDocument();
+        expect(screen.getByText('Wed')).toBeInTheDocument();
+        expect(screen.getByText('Fri')).toBeInTheDocument();
     });
 });

@@ -1,0 +1,56 @@
+﻿
+ RUN  v4.0.18 C:/Users/Hanz Mapua/Workspace/HabitForge
+
+stdout | src/components/dashboard/HabitList.test.tsx > HabitList > renders empty state when no habits exist
+HabitList Effect: Fetching history for 2026-01-01 2026-12-31
+
+stdout | src/components/dashboard/HabitList.test.tsx > HabitList > calls fetchHabits and fetchHistory on mount
+HabitList Effect: Fetching history for 2026-01-01 2026-12-31
+
+stdout | src/components/dashboard/HabitList.test.tsx > HabitList > fetches history when year changes
+HabitList Effect: Fetching history for 2026-01-01 2026-12-31
+FetchHistory calls: [ [ [32m'2026-01-01'[39m, [32m'2026-12-31'[39m ] ]
+Expected: 2026-01-01 2026-12-31
+
+stdout | src/components/dashboard/HabitList.test.tsx > HabitList > renders the heatmap when habits exist
+HabitList Effect: Fetching history for 2026-01-01 2026-12-31
+
+stdout | src/components/dashboard/HabitList.test.tsx > HabitList > renders list of habits with correct names
+HabitList Effect: Fetching history for 2026-01-01 2026-12-31
+
+stdout | src/components/dashboard/HabitList.test.tsx > HabitList > displays habit frequency badge
+HabitList Effect: Fetching history for 2026-01-01 2026-12-31
+
+stdout | src/components/dashboard/HabitList.test.tsx > HabitList > displays habit icons
+HabitList Effect: Fetching history for 2026-01-01 2026-12-31
+
+stdout | src/components/dashboard/HabitList.test.tsx > HabitList > has edit links for each habit
+HabitList Effect: Fetching history for 2026-01-01 2026-12-31
+
+stdout | src/components/dashboard/HabitList.test.tsx > HabitList > has delete buttons for each habit
+HabitList Effect: Fetching history for 2026-01-01 2026-12-31
+
+stdout | src/components/dashboard/HabitList.test.tsx > HabitList > calls deleteHabit when delete is confirmed
+HabitList Effect: Fetching history for 2026-01-01 2026-12-31
+
+stdout | src/components/dashboard/HabitList.test.tsx > HabitList > does NOT call deleteHabit when delete is cancelled
+HabitList Effect: Fetching history for 2026-01-01 2026-12-31
+
+ Γ¥» src/components/dashboard/HabitList.test.tsx (11 tests | 1 failed) 1409ms
+     Γ£ô renders empty state when no habits exist 139ms
+     Γ£ô calls fetchHabits and fetchHistory on mount 5ms
+     ├ù fetches history when year changes 1014ms
+     Γ£ô renders the heatmap when habits exist 15ms
+     Γ£ô renders list of habits with correct names 27ms
+     Γ£ô displays habit frequency badge 16ms
+     Γ£ô displays habit icons 9ms
+     Γ£ô has edit links for each habit 40ms
+     Γ£ô has delete buttons for each habit 32ms
+     Γ£ô calls deleteHabit when delete is confirmed 70ms
+     Γ£ô does NOT call deleteHabit when delete is cancelled 41ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 passed (11)
+   Start at  10:24:40
+   Duration  2.93s (transform 142ms, setup 121ms, import 370ms, tests 1.41s, environment 854ms)
+

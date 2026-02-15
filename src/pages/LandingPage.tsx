@@ -31,7 +31,7 @@ function Navbar() {
                         Features
                     </a>
                     <a
-                        href="#hero"
+                        href="#pricing"
                         className="text-text-muted hover:text-text-primary text-sm font-medium transition-colors duration-200"
                     >
                         Pricing

@@ -40,6 +40,8 @@ export default function SignUpPage() {
                         formFieldAction: "text-accent-primary hover:text-accent-hover font-medium",
                         formFieldActionLink: "text-accent-primary hover:text-accent-hover font-medium",
                         formFieldAction__resendCode: "text-accent-primary hover:text-accent-hover font-medium",
+                        otpCodeFieldInput: "bg-bg-secondary border-border-subtle text-text-primary",
+                        otpCodeFieldLabel: "text-text-primary",
                     }
                 }}
             />

@@ -40,6 +40,8 @@ export default function SignInPage() {
                         formFieldAction__forgotPassword: "text-accent-primary hover:text-accent-hover font-medium",
                         formFieldAction__resendCode: "text-accent-primary hover:text-accent-hover font-medium",
                         formFieldInputShowPasswordIcon: "text-text-secondary hover:text-text-primary",
+                        otpCodeFieldInput: "bg-bg-secondary border-border-subtle text-text-primary",
+                        otpCodeFieldLabel: "text-text-primary",
                     }
                 }}
             />

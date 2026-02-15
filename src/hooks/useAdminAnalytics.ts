@@ -10,6 +10,7 @@ export interface AdminAnalytics {
     mau: number;
     avgHabits: number;
     avgCompletionRate: number;
+    retentionRate: number;
     growthData: { date: string; count: number }[];
 }
 
@@ -41,10 +42,10 @@ export function useAdminAnalytics() {
             const now = new Date();
             const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
             const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
+            const thirtyDaysAgoDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
             const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
 
             // Run queries in parallel
-            // Note: For growthData, we'll fetch profiles from last 30 days to group them
             const [
                 totalRes,
                 new7dRes,
@@ -53,7 +54,8 @@ export function useAdminAnalytics() {
                 mauRes,
                 habitsRes,
                 completionsRes,
-                growthRes
+                growthRes,
+                dailyHabitsRes
             ] = await Promise.all([
                 supabase.from('profiles').select('*', { count: 'exact', head: true }),
                 supabase.from('profiles').select('*', { count: 'exact', head: true }).gte('created_at', sevenDaysAgo),
@@ -61,12 +63,13 @@ export function useAdminAnalytics() {
                 supabase.from('profiles').select('*', { count: 'exact', head: true }).gte('updated_at', twentyFourHoursAgo),
                 supabase.from('profiles').select('*', { count: 'exact', head: true }).gte('updated_at', thirtyDaysAgo),
                 supabase.from('habits').select('*', { count: 'exact', head: true }),
-                supabase.from('habit_completions').select('*', { count: 'exact', head: true }),
-                supabase.from('profiles').select('created_at').order('created_at', { ascending: true }).gte('created_at', thirtyDaysAgo)
+                supabase.from('habit_completions').select('*', { count: 'exact', head: true }).gte('completed_date', thirtyDaysAgoDate),
+                supabase.from('profiles').select('created_at').order('created_at', { ascending: true }).gte('created_at', thirtyDaysAgo),
+                supabase.from('habits').select('*', { count: 'exact', head: true }).eq('frequency', 'daily')
             ]);
 
             // Check for errors
-            const errors = [totalRes, new7dRes, new30dRes, dauRes, mauRes, habitsRes, completionsRes, growthRes]
+            const errors = [totalRes, new7dRes, new30dRes, dauRes, mauRes, habitsRes, completionsRes, growthRes, dailyHabitsRes]
                 .filter(res => res.error)
                 .map(res => res.error?.message);
 
@@ -76,6 +79,18 @@ export function useAdminAnalytics() {
 
             const totalUsers = totalRes.count || 0;
             const avgHabits = totalUsers > 0 ? (habitsRes.count || 0) / totalUsers : 0;
+
+            const mau = mauRes.count || 0;
+            const dau = dauRes.count || 0;
+            const retentionRate = mau > 0 ? (dau / mau) * 100 : 0;
+
+            // Simple avg completion rate: (total 30d completions) / (daily habits * 30 + weekly habits * 4)
+            const dailyHabits = dailyHabitsRes.count || 0;
+            const totalHabits = habitsRes.count || 0;
+            const weeklyHabits = totalHabits - dailyHabits;
+            const totalCompletions = completionsRes.count || 0;
+            const expectedCompletions = (dailyHabits * 30) + (weeklyHabits * 4.3); // roughly 4.3 weeks in 30 days
+            const avgCompletionRate = expectedCompletions > 0 ? (totalCompletions / expectedCompletions) * 100 : 0;
 
             // Process growth data (group by day)
             const growthMap = new Map<string, number>();
@@ -104,10 +119,11 @@ export function useAdminAnalytics() {
                 totalUsers,
                 newUsers7d: new7dRes.count || 0,
                 newUsers30d: new30dRes.count || 0,
-                dau: dauRes.count || 0,
-                mau: mauRes.count || 0,
+                dau,
+                mau,
                 avgHabits: parseFloat(avgHabits.toFixed(1)),
-                avgCompletionRate: 0, // Placeholder for now
+                avgCompletionRate: parseFloat(Math.min(avgCompletionRate, 100).toFixed(1)),
+                retentionRate: parseFloat(Math.min(retentionRate, 100).toFixed(1)),
                 growthData
             });
         } catch (err: any) {

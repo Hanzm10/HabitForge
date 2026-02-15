@@ -4,13 +4,12 @@ import {
     UserPlus,
     Activity,
     TrendingUp,
-    CheckCircle2,
-    ListTodo,
     AlertCircle
 } from 'lucide-react';
 import { useAdminAnalytics } from '../../hooks/useAdminAnalytics';
 import { AnalyticsCard } from '../../components/admin/AnalyticsCard';
 import { GrowthGraph } from '../../components/admin/GrowthGraph';
+import { EngagementMetrics } from '../../components/admin/EngagementMetrics';
 
 export default function AdminDashboard() {
     const { analytics, isLoading, error, fetchAnalytics } = useAdminAnalytics();
@@ -93,27 +92,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Secondary Metrics */}
-            <section>
-                <h2 className="text-xl font-bold text-text-primary font-satoshi mb-6">Engagement Overview</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <AnalyticsCard
-                        label="Avg Habits / User"
-                        value={analytics?.avgHabits ?? 0}
-                        icon={ListTodo}
-                        description="Per registered user"
-                    />
-                    <AnalyticsCard
-                        label="Daily Completion %"
-                        value={`${analytics?.avgCompletionRate ?? 0}%`}
-                        icon={CheckCircle2}
-                        description="Global average"
-                    />
-                    {/* Placeholder for more metrics */}
-                    <div className="bg-bg-secondary/50 border border-dashed border-border-subtle rounded-xl flex items-center justify-center p-6 grayscale opacity-50">
-                        <p className="text-text-muted text-sm italic">Advanced metrics coming soon...</p>
-                    </div>
-                </div>
-            </section>
+            <EngagementMetrics analytics={analytics} />
         </div>
     );
 }

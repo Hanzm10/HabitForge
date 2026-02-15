@@ -66,4 +66,5 @@
 | 2026-02-15 | Phase 6: Admin Dashboard Analytics — KPI cards + RLS (TDD). |
 | 2026-02-15 | Phase 5: User Settings Page — Clerk integration + Theming. |
 | 2026-02-15 | Phase 6: Admin Dashboard — Growth Graph (TDD, cumulative logic). |
+| 2026-02-15 | Phase 6: Admin Engagement Metrics (Retention, Completion %). |
 

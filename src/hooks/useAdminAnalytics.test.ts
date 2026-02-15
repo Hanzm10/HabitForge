@@ -33,19 +33,23 @@ describe('useAdminAnalytics', () => {
         const query: any = {
             gte: vi.fn().mockReturnThis(),
             order: vi.fn().mockReturnThis(),
+            eq: vi.fn().mockReturnThis(),
             then: vi.fn().mockImplementation((fn) => Promise.resolve(response).then(fn)),
         };
-        // Ensure gte and order return the query object
+        // Ensure methods return the query object
         query.gte.mockImplementation(() => query);
         query.order.mockImplementation(() => query);
+        query.eq.mockImplementation(() => query);
         return query;
     };
 
     it('fetches total users, new users, and DAU/MAU', async () => {
-        const mockCounts = [100, 10, 30, 40, 80, 200, 500];
-        let callIndex = 0;
+        // totalUsers: 100, new7: 10, new30: 30, dau: 40, mau: 80, 
+        // habits: 200, completions: 3000, growth: ..., dailyHabits: 100
+        const mockCounts = [100, 10, 30, 40, 80, 200, 3000, 100];
+        let countIndex = 0;
 
-        mockFrom.mockImplementation((table) => ({
+        mockFrom.mockImplementation(() => ({
             select: vi.fn().mockImplementation((columns) => {
                 // If the query includes 'created_at' and uses order, it's the growth data query
                 if (columns === 'created_at') {
@@ -57,8 +61,10 @@ describe('useAdminAnalytics', () => {
                 }
 
                 // Otherwise it's one of the count queries
-                const response = { count: mockCounts[callIndex++] || 0, error: null };
-                return createMockQuery(response);
+                const response = { count: mockCounts[countIndex++] ?? 0, error: null };
+                const query = createMockQuery(response);
+                query.eq = vi.fn().mockReturnThis();
+                return query;
             })
         }));
 
@@ -68,6 +74,10 @@ describe('useAdminAnalytics', () => {
             await result.current.fetchAnalytics();
         });
 
+        // avgHabits = 200 / 100 = 2.0
+        // retentionRate = (40 / 80) * 100 = 50.0
+        // Expected completions = (100 * 30) + (100 * 4.3) = 3000 + 430 = 3430
+        // avgCompletionRate = (3000 / 3430) * 100 = 87.5
         expect(result.current.analytics).toEqual({
             totalUsers: 100,
             newUsers7d: 10,
@@ -75,7 +85,8 @@ describe('useAdminAnalytics', () => {
             dau: 40,
             mau: 80,
             avgHabits: 2.0,
-            avgCompletionRate: 0,
+            avgCompletionRate: 87.5,
+            retentionRate: 50.0,
             growthData: expect.any(Array),
         });
 

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Flame } from 'lucide-react'
+import { Logo } from '../components/ui/Logo'
 import { HeroSection } from '../components/landing/HeroSection'
 import { FeaturesSection } from '../components/landing/FeaturesSection'
 import { SocialProofSection } from '../components/landing/SocialProofSection'
@@ -16,11 +16,8 @@ function Navbar() {
         >
             <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
                 {/* Logo */}
-                <Link to="/" className="flex items-center gap-2 group">
-                    <Flame className="w-6 h-6 text-accent-primary group-hover:text-accent-hover transition-colors duration-200" />
-                    <span className="text-xl font-bold text-text-primary font-satoshi tracking-tight">
-                        HabitForge
-                    </span>
+                <Link to="/" className="group">
+                    <Logo className="group-hover:opacity-80 transition-opacity duration-200" />
                 </Link>
 
                 {/* Nav links (desktop) */}

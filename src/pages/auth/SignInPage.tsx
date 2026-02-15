@@ -1,14 +1,13 @@
 import { SignIn } from '@clerk/clerk-react'
 import { Link } from 'react-router-dom'
 import { PageTransition } from '../../components/ui/PageTransition'
+import { Logo } from '../../components/ui/Logo'
 
 export default function SignInPage() {
     return (
         <PageTransition className="min-h-screen bg-bg-primary flex flex-col items-center justify-center p-4">
             <div className="mb-8 text-center">
-                <h1 className="text-3xl font-bold text-text-primary font-satoshi mb-2">
-                    HabitForge
-                </h1>
+                <Logo className="justify-center mb-2" iconSize={32} textSize="text-3xl" />
                 <p className="text-text-secondary">Sign in to continue your streak.</p>
             </div>
 

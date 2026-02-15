@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Flame } from 'lucide-react'
+import { Logo } from '../ui/Logo'
 
 export function FooterSection() {
     return (
@@ -7,12 +7,7 @@ export function FooterSection() {
             <div className="max-w-6xl mx-auto">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-8">
                     {/* Logo */}
-                    <div className="flex items-center gap-2">
-                        <Flame className="w-5 h-5 text-accent-primary" />
-                        <span className="text-text-primary font-bold font-satoshi text-lg">
-                            HabitForge
-                        </span>
-                    </div>
+                    <Logo iconSize={20} textSize="text-lg" />
 
                     {/* Links */}
                     <div className="flex items-center gap-8">

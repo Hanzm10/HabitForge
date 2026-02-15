@@ -2,6 +2,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { LayoutDashboard, CheckCircle, Settings, X, Shield } from 'lucide-react';
 import { useAdmin } from '../../hooks/useAdmin';
+import { Logo } from '../ui/Logo';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -31,7 +32,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             >
                 <div className="flex flex-col h-full">
                     <div className="flex items-center justify-between h-16 px-6 border-b border-subtle">
-                        <span className="text-xl font-bold text-accent-primary">HabitForge</span>
+                        <Logo />
                         <button onClick={onClose} className="md:hidden text-text-muted hover:text-text-primary">
                             <X size={24} />
                             <span className="sr-only">Close menu</span>

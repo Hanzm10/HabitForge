@@ -61,4 +61,5 @@
 | 2026-02-15 | Phase 5: Daily completion toggle (TDD, 93 tests). |
 | 2026-02-15 | Phase 5: Calendar heatmap view (TDD, 104 tests). |
 | 2026-02-15 | Phase 5: Icon Picker component + integration (TDD). |
+| 2026-02-15 | Bugfix: Integrated `useProfileSync` into `ProtectedRoute`. |
 

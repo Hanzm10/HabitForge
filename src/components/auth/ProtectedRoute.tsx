@@ -1,4 +1,5 @@
 import { useAuth, RedirectToSignIn } from '@clerk/clerk-react'
+import { useProfileSync } from '../../hooks/useProfileSync'
 
 interface ProtectedRouteProps {
     children: React.ReactNode
@@ -6,6 +7,9 @@ interface ProtectedRouteProps {
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     const { isLoaded, isSignedIn } = useAuth()
+
+    // Sync profile to Supabase on mount/auth change
+    useProfileSync()
 
     if (!isLoaded) {
         return null // Or a loading spinner

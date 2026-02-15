@@ -10,6 +10,12 @@ vi.mock('@clerk/clerk-react', () => ({
     RedirectToSignIn: () => <div data-testid="redirect-to-sign-in">Redirecting...</div>,
 }))
 
+// Mock useProfileSync
+const mockUseProfileSync = vi.fn()
+vi.mock('../hooks/useProfileSync', () => ({
+    useProfileSync: () => mockUseProfileSync(),
+}))
+
 describe('ProtectedRoute', () => {
     beforeEach(() => {
         vi.clearAllMocks()
@@ -35,6 +41,8 @@ describe('ProtectedRoute', () => {
 
         expect(screen.getByTestId('redirect-to-sign-in')).toBeInTheDocument()
         expect(screen.queryByText('Protected Content')).not.toBeInTheDocument()
+        // Should still try to sync? Probably yes, the hook handles the check.
+        expect(mockUseProfileSync).toHaveBeenCalled()
     })
 
     it('renders children when signed in', () => {
@@ -57,6 +65,7 @@ describe('ProtectedRoute', () => {
 
         expect(screen.queryByTestId('redirect-to-sign-in')).not.toBeInTheDocument()
         expect(screen.getByText('Protected Content')).toBeInTheDocument()
+        expect(mockUseProfileSync).toHaveBeenCalled()
     })
 
     it('renders nothing while loading', () => {

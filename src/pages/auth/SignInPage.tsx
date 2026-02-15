@@ -18,6 +18,9 @@ export default function SignInPage() {
                 signUpUrl="/sign-up"
                 forceRedirectUrl="/dashboard"
                 appearance={{
+                    variables: {
+                        colorPrimary: "#6366F1",
+                    },
                     elements: {
                         rootBox: "mx-auto",
                         card: "bg-bg-card border border-border-subtle shadow-xl",
@@ -31,6 +34,13 @@ export default function SignInPage() {
                         formFieldInput: "bg-bg-secondary border-border-subtle text-text-primary placeholder:text-text-secondary",
                         footerActionLink: "text-accent-primary hover:text-accent-hover",
                         formButtonPrimary: "bg-accent-primary hover:bg-accent-hover text-white",
+                        identityPreviewText: "text-text-primary",
+                        identityPreviewEditButtonIcon: "text-text-secondary hover:text-text-primary",
+                        formFieldAction: "text-accent-primary hover:text-accent-hover font-medium",
+                        formFieldActionLink: "text-accent-primary hover:text-accent-hover font-medium",
+                        formFieldAction__forgotPassword: "text-accent-primary hover:text-accent-hover font-medium",
+                        formFieldAction__resendCode: "text-accent-primary hover:text-accent-hover font-medium",
+                        formFieldInputShowPasswordIcon: "text-text-secondary hover:text-text-primary",
                     }
                 }}
             />

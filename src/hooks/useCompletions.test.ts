@@ -260,6 +260,90 @@ describe('useCompletions', () => {
     });
 
     // =========================================================================
+    // fetchHistory
+    // =========================================================================
+
+    describe('fetchHistory', () => {
+        it('fetches completion history for a date range and populates history map', async () => {
+            const startDate = '2026-01-01';
+            const endDate = '2026-01-31';
+
+            // habits chain
+            const mockHabitEqArchived = vi.fn().mockResolvedValue({
+                data: [{ id: 'habit-1' }, { id: 'habit-2' }],
+                error: null,
+            });
+            const mockHabitEqProfile = vi.fn().mockReturnValue({ eq: mockHabitEqArchived });
+            const mockHabitSelect = vi.fn().mockReturnValue({ eq: mockHabitEqProfile });
+
+            // completions chain
+            const mockCompletionsData = [
+                { completed_date: '2026-01-01' },
+                { completed_date: '2026-01-01' }, // 2 on this day
+                { completed_date: '2026-01-02' }, // 1 on this day
+            ];
+
+            const mockLte = vi.fn().mockResolvedValue({ data: mockCompletionsData, error: null });
+            const mockGte = vi.fn().mockReturnValue({ lte: mockLte });
+            const mockIn = vi.fn().mockReturnValue({ gte: mockGte });
+            // .select('completed_date')
+            const mockCompSelect = vi.fn().mockReturnValue({ in: mockIn });
+
+            mockFrom.mockImplementation((table: string) => {
+                if (table === 'profiles') return { select: mockSelect };
+                if (table === 'habits') return { select: mockHabitSelect };
+                if (table === 'habit_completions') return { select: mockCompSelect };
+                return {};
+            });
+
+            const { result } = renderHook(() => useCompletions());
+
+            await act(async () => {
+                await result.current.fetchHistory(startDate, endDate);
+            });
+
+            expect(result.current.history.get('2026-01-01')).toBe(2);
+            expect(result.current.history.get('2026-01-02')).toBe(1);
+            expect(result.current.history.has('2026-01-03')).toBe(false);
+        });
+
+        it('handles errors gracefully during fetchHistory', async () => {
+            const startDate = '2026-01-01';
+            const endDate = '2026-01-31';
+
+            // habits chain success
+            const mockHabitEqArchived = vi.fn().mockResolvedValue({
+                data: [{ id: 'habit-1' }],
+                error: null,
+            });
+            const mockHabitEqProfile = vi.fn().mockReturnValue({ eq: mockHabitEqArchived });
+            const mockHabitSelect = vi.fn().mockReturnValue({ eq: mockHabitEqProfile });
+
+            // completions chain fails
+            const mockLte = vi.fn().mockResolvedValue({ data: null, error: { message: 'DB Error' } });
+            const mockGte = vi.fn().mockReturnValue({ lte: mockLte });
+            const mockIn = vi.fn().mockReturnValue({ gte: mockGte });
+            const mockCompSelect = vi.fn().mockReturnValue({ in: mockIn });
+
+            mockFrom.mockImplementation((table: string) => {
+                if (table === 'profiles') return { select: mockSelect };
+                if (table === 'habits') return { select: mockHabitSelect };
+                if (table === 'habit_completions') return { select: mockCompSelect };
+                return {};
+            });
+
+            const { result } = renderHook(() => useCompletions());
+
+            await act(async () => {
+                await result.current.fetchHistory(startDate, endDate);
+            });
+
+            expect(result.current.error).toBe('DB Error');
+            expect(result.current.history.size).toBe(0);
+        });
+    });
+
+    // =========================================================================
     // initial state
     // =========================================================================
 

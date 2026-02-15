@@ -23,6 +23,7 @@
 - useHabits hook (Clerk auth → Supabase insert/fetch/update/delete)
 - Habit list with edit/delete (HabitList + EditHabitForm)
 - Daily completion toggle (useCompletions hook + DailyToggle component)
+- Calendar Heatmap (useCompletions history + HabitHeatmap component)
 
 ## Key Facts
 - **Supabase Project:** `qltyzyktalhrmsqcyebp` (ap-southeast-1, ACTIVE_HEALTHY, $0/mo)
@@ -57,4 +58,5 @@
 | 2026-02-15 | Phase 5: 19 test files, 59 tests (all GREEN).    |
 | 2026-02-15 | Phase 5: Habit list + edit/delete (TDD, 82 tests).|
 | 2026-02-15 | Phase 5: Daily completion toggle (TDD, 93 tests). |
+| 2026-02-15 | Phase 5: Calendar heatmap view (TDD, 104 tests). |
 

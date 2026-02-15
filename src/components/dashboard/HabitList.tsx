@@ -4,18 +4,32 @@ import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { useHabits } from '../../hooks/useHabits';
 import { useCompletions } from '../../hooks/useCompletions';
 import { DailyToggle } from './DailyToggle';
+import { HabitHeatmap } from './HabitHeatmap';
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
+const getOneYearAgoDate = () => {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() - 1);
+    return d.toISOString().split('T')[0];
+};
 
 export const HabitList = () => {
     const { habits, fetchHabits, deleteHabit, isLoading } = useHabits();
-    const { completions, fetchCompletions, toggleCompletion, isLoading: isToggling } = useCompletions();
+    const {
+        completions,
+        history,
+        fetchCompletions,
+        fetchHistory,
+        toggleCompletion,
+        isLoading: isCompletionsLoading
+    } = useCompletions();
     const [togglingHabitId, setTogglingHabitId] = useState<string | null>(null);
 
     useEffect(() => {
         fetchHabits();
         fetchCompletions(getTodayDate());
-    }, [fetchHabits, fetchCompletions]);
+        fetchHistory(getOneYearAgoDate(), getTodayDate());
+    }, [fetchHabits, fetchCompletions, fetchHistory]);
 
     const handleToggle = async (habitId: string) => {
         setTogglingHabitId(habitId);
@@ -65,6 +79,16 @@ export const HabitList = () => {
 
     return (
         <div>
+            {/* Activity Heatmap */}
+            <div className="mb-8">
+                <h2 className="text-lg font-semibold text-text-primary mb-4 flex items-center gap-2">
+                    <span className="text-xl">🔥</span> Activity Overview
+                </h2>
+                <div className="bg-card border border-subtle rounded-xl p-1 overflow-hidden">
+                    <HabitHeatmap history={history} isLoading={isCompletionsLoading && !togglingHabitId} />
+                </div>
+            </div>
+
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-bold text-text-primary">My Habits</h1>
                 <Link
@@ -88,7 +112,7 @@ export const HabitList = () => {
                             habitColor={habit.color}
                             isCompleted={completions.has(habit.id)}
                             onToggle={() => handleToggle(habit.id)}
-                            isLoading={isToggling && togglingHabitId === habit.id}
+                            isLoading={isCompletionsLoading && togglingHabitId === habit.id}
                         />
 
                         {/* Icon */}

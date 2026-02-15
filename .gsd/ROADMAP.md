@@ -65,7 +65,7 @@
 - [x] Create habit form (name, description, color, icon, frequency)
 - [x] Habit list with edit/delete
 - [x] Daily completion toggle
-- [ ] Calendar heatmap view
+- [x] Calendar heatmap view
 - [ ] Streak counter (current + longest)
 - [ ] Completion rate % per habit
 - [ ] Weekly progress overview card

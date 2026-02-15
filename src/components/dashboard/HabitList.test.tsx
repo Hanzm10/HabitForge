@@ -20,14 +20,27 @@ vi.mock('../../hooks/useHabits', () => ({
     }),
 }));
 
+// Mock HabitHeatmap
+vi.mock('./HabitHeatmap', () => ({
+    HabitHeatmap: () => <div data-testid="habit-heatmap">Heatmap</div>,
+}));
+
+// Mock HabitHeatmap
+vi.mock('./HabitHeatmap', () => ({
+    HabitHeatmap: () => <div data-testid="habit-heatmap">Heatmap</div>,
+}));
+
 // Mock useCompletions hook
 const mockFetchCompletions = vi.fn();
+const mockFetchHistory = vi.fn();
 const mockToggleCompletion = vi.fn().mockResolvedValue({ success: true });
 
 vi.mock('../../hooks/useCompletions', () => ({
     useCompletions: () => ({
         completions: new Map(),
+        history: new Map(),
         fetchCompletions: mockFetchCompletions,
+        fetchHistory: mockFetchHistory,
         toggleCompletion: mockToggleCompletion,
         isLoading: false,
         error: null,
@@ -88,9 +101,18 @@ describe('HabitList', () => {
         expect(screen.getByRole('link', { name: /create.*habit/i })).toBeInTheDocument();
     });
 
-    it('calls fetchHabits on mount', () => {
+    it('calls fetchHabits and fetchHistory on mount', () => {
         renderList();
         expect(mockFetchHabits).toHaveBeenCalledTimes(1);
+        expect(mockFetchHistory).toHaveBeenCalledTimes(1);
+    });
+
+    it('renders the heatmap when habits exist', async () => {
+        mockHabitsData.mockReturnValue(sampleHabits);
+        renderList();
+        await waitFor(() => {
+            expect(screen.getByTestId('habit-heatmap')).toBeInTheDocument();
+        });
     });
 
     it('renders list of habits with correct names', async () => {

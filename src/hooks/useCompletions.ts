@@ -13,6 +13,7 @@ export function useCompletions() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [completions, setCompletions] = useState<Map<string, string>>(new Map());
+    const [history, setHistory] = useState<Map<string, number>>(new Map());
 
     const getAuthenticatedClient = useCallback(async () => {
         if (!user) return null;
@@ -111,6 +112,78 @@ export function useCompletions() {
     }, [user, getAuthenticatedClient, getProfileId]);
 
     // =========================================================================
+    // fetchHistory — load completion counts for a date range
+    // =========================================================================
+
+    const fetchHistory = useCallback(async (startDate: string, endDate: string): Promise<void> => {
+        if (!user) return;
+
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const client = await getAuthenticatedClient();
+            if (!client) {
+                setIsLoading(false);
+                return;
+            }
+
+            const profileId = await getProfileId(client);
+            if (!profileId) {
+                setError('Profile not found');
+                setIsLoading(false);
+                return;
+            }
+
+            // First get the user's habit IDs
+            const { data: userHabits, error: habitsError } = await client
+                .from('habits')
+                .select('id')
+                .eq('profile_id', profileId)
+                .eq('is_archived', false);
+
+            if (habitsError || !userHabits || userHabits.length === 0) {
+                setHistory(new Map());
+                setIsLoading(false);
+                return;
+            }
+
+            const habitIds = userHabits.map((h: { id: string }) => h.id);
+
+            // Fetch completions for those habits within date range
+            const { data: completionRows, error: compError } = await client
+                .from('habit_completions')
+                .select('completed_date')
+                .in('habit_id', habitIds)
+                .gte('completed_date', startDate)
+                .lte('completed_date', endDate);
+
+            if (compError) {
+                setError(compError.message);
+                setHistory(new Map());
+                setIsLoading(false);
+                return;
+            }
+
+            // Aggregate counts per date
+            const counts = new Map<string, number>();
+            (completionRows || []).forEach((row: { completed_date: string }) => {
+                const date = row.completed_date;
+                counts.set(date, (counts.get(date) || 0) + 1);
+            });
+
+            setHistory(counts);
+            setIsLoading(false);
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Unknown error';
+            setError(message);
+            setHistory(new Map());
+            setIsLoading(false);
+        }
+    }, [user, getAuthenticatedClient, getProfileId]);
+
+
+    // =========================================================================
     // toggleCompletion — insert or delete a completion for a habit + date
     // =========================================================================
 
@@ -190,5 +263,5 @@ export function useCompletions() {
         }
     }, [user, getAuthenticatedClient, completions]);
 
-    return { completions, fetchCompletions, toggleCompletion, isLoading, error };
+    return { completions, history, fetchCompletions, fetchHistory, toggleCompletion, isLoading, error };
 }

@@ -1,12 +1,15 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import type { Database, Tables } from '../types/supabase';
 
 interface WeeklyProgressData {
     actual: number;
     target: number;
     percentage: number;
 }
+
+type Habit = Tables<'habits'>;
 
 export function useWeeklyProgress() {
     const { getToken } = useAuth();
@@ -28,13 +31,12 @@ export function useWeeklyProgress() {
         const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
         const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-        return createClient(supabaseUrl, supabaseAnonKey, {
+        return createClient<Database>(supabaseUrl, supabaseAnonKey, {
             global: { headers: { Authorization: `Bearer ${token}` } },
         });
     }, [user, getToken]);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const getProfileId = useCallback(async (client: any) => {
+    const getProfileId = useCallback(async (client: SupabaseClient<Database>) => {
         if (!user) return null;
 
         const { data: profile, error: profileError } = await client
@@ -44,7 +46,7 @@ export function useWeeklyProgress() {
             .single();
 
         if (profileError || !profile) return null;
-        return (profile as { id: string }).id;
+        return profile.id;
     }, [user]);
 
     const fetchWeeklyProgress = useCallback(async () => {
@@ -110,7 +112,7 @@ export function useWeeklyProgress() {
 
             // 3. Calculate Target
             let target = 0;
-            habits.forEach((habit: any) => {
+            habits.forEach((habit: Habit) => {
                 if (habit.frequency === 'daily') {
                     target += 7;
                 } else if (habit.frequency === 'weekly') {
@@ -119,7 +121,7 @@ export function useWeeklyProgress() {
             });
 
             // 4. Fetch completions for this week
-            const habitIds = habits.map((h: any) => h.id);
+            const habitIds = habits.map((h: Habit) => h.id);
             const { data: completions, error: compError } = await client
                 .from('habit_completions')
                 .select('habit_id, completed_date')
@@ -152,3 +154,4 @@ export function useWeeklyProgress() {
 
     return { progress, isLoading, error, refresh: fetchWeeklyProgress };
 }
+

@@ -41,6 +41,9 @@ export default function SettingsPage() {
                                             src={user.imageUrl}
                                             alt={user.fullName || 'User'}
                                             className="w-16 h-16 rounded-full border-2 border-border-subtle group-hover:border-accent-primary transition-colors object-cover"
+                                            width={64}
+                                            height={64}
+                                            loading="lazy"
                                         />
                                         <div className="absolute inset-0 rounded-full bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                             <User size={20} className="text-white" />

@@ -2,23 +2,65 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useUserManagement } from './useUserManagement';
-import { supabase } from '../lib/supabase';
 
-// Mock Supabase
-vi.mock('../lib/supabase', () => ({
-    supabase: {
-        from: vi.fn(() => ({
-            select: vi.fn(),
-            update: vi.fn(),
-            eq: vi.fn(),
-            order: vi.fn(),
-        })),
-    },
+// Hoist mocks to be available in vi.mock
+const mocks = vi.hoisted(() => {
+    const mockSelect = vi.fn();
+    const mockUpdate = vi.fn();
+    const mockEq = vi.fn();
+    const mockOrder = vi.fn();
+
+    // Chainable mocks
+    mockSelect.mockReturnValue({ order: mockOrder });
+    mockUpdate.mockReturnValue({ eq: mockEq });
+    mockEq.mockReturnThis();
+
+    const mockFrom = vi.fn(() => ({
+        select: mockSelect,
+        update: mockUpdate,
+        eq: mockEq,
+        order: mockOrder,
+    }));
+
+    const mockClient = {
+        from: mockFrom,
+    };
+
+    return {
+        mockSelect,
+        mockUpdate,
+        mockEq,
+        mockOrder,
+        mockFrom,
+        mockClient,
+    };
+});
+
+// Mock Clerk
+const mockGetToken = vi.fn();
+vi.mock('@clerk/clerk-react', () => ({
+    useAuth: () => ({
+        getToken: mockGetToken,
+        isLoaded: true,
+        isSignedIn: true,
+    }),
+}));
+
+// Mock @supabase/supabase-js
+vi.mock('@supabase/supabase-js', () => ({
+    createClient: vi.fn(() => mocks.mockClient),
 }));
 
 describe('useUserManagement', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        // Default token response
+        mockGetToken.mockResolvedValue('mock-token');
+
+        // Reset mock return values if changed in tests
+        mocks.mockSelect.mockReturnValue({ order: mocks.mockOrder });
+        mocks.mockUpdate.mockReturnValue({ eq: mocks.mockEq });
+        mocks.mockEq.mockResolvedValue({ data: [], error: null });
     });
 
     const mockUsers = [
@@ -38,35 +80,30 @@ describe('useUserManagement', () => {
         },
     ];
 
-    it('should fetch users initially', async () => {
-        const selectMock = vi.fn().mockReturnValue({
-            order: vi.fn().mockResolvedValue({ data: mockUsers, error: null }),
-        });
-
-
-        (supabase.from as any).mockImplementation(() => ({
-            select: selectMock,
-        }));
+    it('should fetch users initially using authenticated client', async () => {
+        // Setup success response for fetch
+        mocks.mockOrder.mockResolvedValue({ data: mockUsers, error: null });
 
         const { result } = renderHook(() => useUserManagement());
+
+        // Should start loading
+        expect(result.current.loading).toBe(true);
 
         await waitFor(() => {
             expect(result.current.loading).toBe(false);
         });
 
+        // Verify users set
         expect(result.current.users).toEqual(mockUsers);
-        expect(selectMock).toHaveBeenCalledWith('*');
+
+        // Verify authentication flow
+        expect(mockGetToken).toHaveBeenCalledWith({ template: 'supabase' });
+        expect(mocks.mockFrom).toHaveBeenCalledWith('profiles');
+        expect(mocks.mockSelect).toHaveBeenCalledWith('*');
     });
 
     it('should handle fetch errors', async () => {
-        const selectMock = vi.fn().mockReturnValue({
-            order: vi.fn().mockResolvedValue({ data: null, error: { message: 'Fetch error' } }),
-        });
-
-
-        (supabase.from as any).mockImplementation(() => ({
-            select: selectMock,
-        }));
+        mocks.mockOrder.mockResolvedValue({ data: null, error: { message: 'Fetch error' } });
 
         const { result } = renderHook(() => useUserManagement());
 
@@ -79,27 +116,11 @@ describe('useUserManagement', () => {
     });
 
     it('should update user role', async () => {
-        // Setup initial fetch
-        const selectMock = vi.fn().mockReturnValue({
-            order: vi.fn().mockResolvedValue({ data: mockUsers, error: null }),
-        });
+        // Initial fetch success
+        mocks.mockOrder.mockResolvedValue({ data: mockUsers, error: null });
 
-        // Setup update call
-        // The chain: .update({ role }).eq('id', userId) -> returns Promise
-        const eqMock = vi.fn().mockResolvedValue({ data: [{ ...mockUsers[0], role: 'admin' }], error: null });
-        const updateMock = vi.fn().mockReturnValue({ eq: eqMock });
-
-
-        (supabase.from as any).mockImplementation((table: string) => {
-            if (table === 'profiles') {
-                return {
-                    select: selectMock,
-                    update: updateMock,
-                }
-            }
-            return {};
-        });
-
+        // Update success (chain: update -> eq -> resolved)
+        mocks.mockEq.mockResolvedValue({ error: null });
 
         const { result } = renderHook(() => useUserManagement());
 
@@ -111,34 +132,19 @@ describe('useUserManagement', () => {
             await result.current.updateUserRole('user-1', 'admin');
         });
 
-        expect(updateMock).toHaveBeenCalledWith({ role: 'admin' });
-        expect(eqMock).toHaveBeenCalledWith('id', 'user-1');
+        expect(mocks.mockUpdate).toHaveBeenCalledWith({ role: 'admin' });
+        expect(mocks.mockEq).toHaveBeenCalledWith('id', 'user-1');
 
-        // Check optimistic update or refetch logic - here assuming we update local state
+        // Optimistic update verify
         expect(result.current.users[0].role).toBe('admin');
     });
 
     it('should toggle user suspension', async () => {
-        // Setup initial fetch
-        const selectMock = vi.fn().mockReturnValue({
-            order: vi.fn().mockResolvedValue({ data: mockUsers, error: null }),
-        });
+        // Initial fetch
+        mocks.mockOrder.mockResolvedValue({ data: mockUsers, error: null });
 
-        // Setup update call
-        // The chain: .update({ is_suspended }).eq('id', userId) -> returns Promise
-        const eqMock = vi.fn().mockResolvedValue({ data: [{ ...mockUsers[0], is_suspended: true }], error: null });
-        const updateMock = vi.fn().mockReturnValue({ eq: eqMock });
-
-
-        (supabase.from as any).mockImplementation((table: string) => {
-            if (table === 'profiles') {
-                return {
-                    select: selectMock,
-                    update: updateMock,
-                }
-            }
-            return {};
-        });
+        // Update success
+        mocks.mockEq.mockResolvedValue({ error: null });
 
         const { result } = renderHook(() => useUserManagement());
 
@@ -150,10 +156,10 @@ describe('useUserManagement', () => {
             await result.current.toggleUserSuspension('user-1', true);
         });
 
-        expect(updateMock).toHaveBeenCalledWith({ is_suspended: true });
-        expect(eqMock).toHaveBeenCalledWith('id', 'user-1');
+        expect(mocks.mockUpdate).toHaveBeenCalledWith({ is_suspended: true });
+        expect(mocks.mockEq).toHaveBeenCalledWith('id', 'user-1');
 
-        // Check local state update
+        // Optimistic update verify
         expect(result.current.users[0].is_suspended).toBe(true);
     });
 });

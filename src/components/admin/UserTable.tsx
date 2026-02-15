@@ -1,4 +1,3 @@
-
 import {
     Table,
     TableBody,
@@ -27,10 +26,37 @@ import {
     SelectValue,
 } from "../ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useState } from "react";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "../ui/alert-dialog";
 
 export default function UserTable() {
     const { users, loading, error, updateUserRole, toggleUserSuspension } =
         useUserManagement();
+
+    const [pendingRoleChange, setPendingRoleChange] = useState<{
+        userId: string;
+        newRole: "user" | "admin";
+    } | null>(null);
+
+    const handleRoleChange = (userId: string, newRole: "user" | "admin") => {
+        setPendingRoleChange({ userId, newRole });
+    };
+
+    const confirmRoleChange = async () => {
+        if (pendingRoleChange) {
+            await updateUserRole(pendingRoleChange.userId, pendingRoleChange.newRole);
+            setPendingRoleChange(null);
+        }
+    };
 
     if (loading) {
         return <div className="text-center py-10">Loading users...</div>;
@@ -73,15 +99,13 @@ export default function UserTable() {
                                 <Select
                                     defaultValue={user.role}
                                     onValueChange={(value: "user" | "admin") =>
-                                        updateUserRole(user.id, value)
+                                        handleRoleChange(user.id, value)
                                     }
-                                // Disable role change for self to prevent lockout? 
-                                // For now, allow it but maybe add warning later.
                                 >
                                     <SelectTrigger className="w-[100px]">
                                         <SelectValue placeholder="Role" />
                                     </SelectTrigger>
-                                    <SelectContent>
+                                    <SelectContent className="bg-bg-card">
                                         <SelectItem value="user">User</SelectItem>
                                         <SelectItem value="admin">Admin</SelectItem>
                                     </SelectContent>
@@ -102,9 +126,10 @@ export default function UserTable() {
                                             <MoreHorizontal className="h-4 w-4" />
                                         </Button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
+                                    <DropdownMenuContent align="end" className="bg-bg-card">
                                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                         <DropdownMenuItem
+                                            className="cursor-pointer"
                                             onClick={() => navigator.clipboard.writeText(user.id)}
                                         >
                                             Copy User ID
@@ -134,6 +159,22 @@ export default function UserTable() {
                     ))}
                 </TableBody>
             </Table>
+
+            <AlertDialog open={!!pendingRoleChange} onOpenChange={(open) => !open && setPendingRoleChange(null)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Change User Role?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Are you sure you want to change this user's role to <strong>{pendingRoleChange?.newRole}</strong>?
+                            {pendingRoleChange?.newRole === 'admin' && " This will grant them full access to the admin dashboard."}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={confirmRoleChange}>Confirm Change</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }

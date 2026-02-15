@@ -7,7 +7,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
     const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <div className="flex h-screen bg-primary text-text-primary font-satoshi overflow-hidden">
+        <div className="flex h-screen bg-background text-text-primary font-satoshi overflow-hidden">
             <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
 
             <div className="flex flex-col flex-1 min-w-0 overflow-hidden">

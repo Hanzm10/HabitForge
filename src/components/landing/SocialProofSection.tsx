@@ -70,6 +70,9 @@ export function SocialProofSection() {
                                     src={t.avatar}
                                     alt={t.name}
                                     className="w-10 h-10 rounded-full"
+                                    loading="lazy"
+                                    width={40}
+                                    height={40}
                                 />
                                 <div>
                                     <p className="text-text-primary font-medium text-sm">

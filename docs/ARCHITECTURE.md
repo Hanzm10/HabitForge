@@ -1,6 +1,6 @@
 # ARCHITECTURE.md — HabitForge
 
-> Last updated: 2026-02-14
+> Last updated: 2026-02-15
 
 ---
 
@@ -26,30 +26,29 @@ HabitForge/
 ├── public/
 │   └── fonts/              # Satoshi WOFF2 files (self-hosted)
 ├── src/
-│   ├── components/         # Reusable UI components
-│   ├── hooks/              # Custom React hooks
+│   ├── components/
+│   │   ├── admin/          # Admin-specific components (UserTable, Analytics)
+│   │   ├── auth/           # Auth guards and wrappers
+│   │   ├── dashboard/      # User dashboard components (Habits, Heatmap)
+│   │   ├── landing/        # Landing page sections
+│   │   └── ui/             # Shared UI components (Shadcn/Base)
+│   ├── hooks/              # Custom React hooks (Data fetching, Logic)
 │   ├── lib/
-│   │   ├── clerk.ts        # Clerk publishable key export
-│   │   └── supabase.ts     # Typed Supabase client
-│   ├── pages/              # Route-level page components
+│   │   ├── clerk.ts        # Clerk configuration
+│   │   └── supabase.ts     # Supabase client instantiation
+│   ├── pages/              # Route components
+│   │   ├── admin/          # Admin dashboard pages
+│   │   └── dashboard/      # User dashboard pages
 │   ├── types/
-│   │   └── supabase.ts     # Generated DB types (from Supabase MCP)
-│   ├── App.tsx             # Router + app shell
-│   ├── main.tsx            # Entry point (ClerkProvider wrapper)
-│   └── index.css           # Tailwind + @font-face + base styles
+│   │   └── supabase.ts     # Database types
+│   ├── App.tsx             # Main router
+│   └── index.css           # Global styles
 ├── docs/
 │   └── ARCHITECTURE.md     # This file
-├── .gsd/
-│   ├── SPEC.md             # Product specification (FINALIZED)
-│   ├── ROADMAP.md          # Phased execution plan
-│   └── STATE.md            # Session memory
-├── .env.local              # Real keys (gitignored)
-├── .env.example            # Key placeholders for docs
-├── tailwind.config.js      # Design tokens from SPEC §7
-├── postcss.config.js       # Tailwind PostCSS pipeline
-├── vite.config.ts          # Vite configuration
-└── tsconfig.json           # TypeScript configuration
-```
+├── .gsd/                   # GSD Metadata
+├── .env.local              # Environment variables
+├── vercel.json             # Deployment config
+└── tailwind.config.js      # Design tokens
 
 ---
 
@@ -86,11 +85,13 @@ HabitForge/
 | 2026-02-14 | Tailwind v3 (not v4)                             | Stable, well-documented, broad ecosystem     |
 | 2026-02-14 | Self-hosted Satoshi font                         | Avoid external CDN dependency                |
 | 2026-02-14 | RLS via Clerk JWT `sub` claim                    | Secure per-user data isolation               |
+| 2026-02-15 | Strict TypeScript in Hooks                       | Prevent runtime errors and improve DX        |
+| 2026-02-15 | Vercel SPA Routing                               | Ensure client-side routing works on deploy   |
 
 ---
 
 ## Context Restoration
 
-* **Current Goal:** Phase 2 Scaffolding complete → next is Phase 3 (Landing Page)
-* **Last Action:** Project scaffolded, DB tables created, types generated, design system configured
-* **Active Problems:** User needs to drop Satoshi WOFF2 files into `public/fonts/`
+* **Current Goal:** Project Complete. Ready for Deployment.
+* **Last Action:** Polished UX, Audit Security, Final Build Verified.
+* **Active Problems:** None. Ready to ship.

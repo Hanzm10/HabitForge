@@ -5,7 +5,7 @@
 ---
 
 ## Current Phase
-**🟢 Phase 5: USER DASHBOARD → IN PROGRESS**
+**🟢 Phase 4: POLISH, AUDIT & DEPLOY → IN PROGRESS**
 
 ## Current Status
 - SPEC.md FINALIZED (v1.0)
@@ -26,6 +26,8 @@
 - Calendar Heatmap (useCompletions history + HabitHeatmap component)
 - Icon Picker (reusable component + form integration)
 - Streak Counter (useStreaks hook + StreakCounter component)
+- Admin User Management (Table, Search, Role Management, Suspension)
+- UI Refinements (Dark mode fixes, Dialogs, Tooltips)
 
 ## Key Facts
 - **Supabase Project:** `qltyzyktalhrmsqcyebp` (ap-southeast-1, ACTIVE_HEALTHY, $0/mo)
@@ -67,4 +69,8 @@
 | 2026-02-15 | Phase 5: User Settings Page — Clerk integration + Theming. |
 | 2026-02-15 | Phase 6: Admin Dashboard — Growth Graph (TDD, cumulative logic). |
 | 2026-02-15 | Phase 6: Admin Engagement Metrics (Retention, Completion %). |
+| 2026-02-15 | Phase 6: Admin User Management Table (RLS + Clerk Auth). |
+| 2026-02-15 | Phase 6: Role Management (Editable + Confirmation Dialog). |
+| 2026-02-15 | Phase 6/7: UI Polish (Popup transparency, Dashboard Background). |
+| 2026-02-15 | Phase 7: Deployment — README, Vercel config, Lint fixes, Full Build ✅. |
 

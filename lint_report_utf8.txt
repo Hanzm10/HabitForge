@@ -1,0 +1,145 @@
+﻿
+> tmpvite@0.0.0 lint
+> eslint .
+
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\.agent\skills\ui-ux-pro-max\cli\src\utils\template.ts
+   1:50  error  'readdir' is defined but never used                @typescript-eslint/no-unused-vars
+  76:23  error  'platformName' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\__tests__\AdminRoute.test.tsx
+  20:36  error  '_args' is defined but never used         @typescript-eslint/no-unused-vars
+  20:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  23:55  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\__tests__\AppRoutes.test.tsx
+  10:92  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  27:36  error  '_args' is defined but never used         @typescript-eslint/no-unused-vars
+  27:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  30:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\__tests__\useProfileSync.test.tsx
+  16:36  error  '_args' is defined but never used         @typescript-eslint/no-unused-vars
+  16:43  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  19:55  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\components\admin\GrowthGraph.test.tsx
+  13:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  14:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  28:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  40:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  52:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\components\admin\UserTable.test.tsx
+  38:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  49:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  59:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\components\dashboard\EditHabitForm.tsx
+  41:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\components\dashboard\EditHabitForm.tsx:41:13
+  39 |     useEffect(() => {
+  40 |         if (habit && !initialized) {
+> 41 |             setName(habit.name);
+     |             ^^^^^^^ Avoid calling setState() directly within an effect
+  42 |             setDescription(habit.description || '');
+  43 |             setColor(habit.color);
+  44 |             setIcon(habit.icon || '');  react-hooks/set-state-in-effect
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\components\dashboard\HabitList.test.tsx
+  41:1   warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')
+  43:44  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\components\dashboard\WeeklyProgressCard.test.tsx
+  13:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  24:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  39:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  50:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\components\ui\badge.tsx
+  37:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\components\ui\button.tsx
+  57:18  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\hooks\useAdminAnalytics.test.ts
+   32:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   33:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  101:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\hooks\useAdminAnalytics.ts
+  129:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\hooks\useCompletionRate.test.ts
+  23:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  23:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  24:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  32:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\hooks\useCurrentProfile.test.ts
+  38:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  45:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  53:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\hooks\useCurrentProfile.ts
+  47:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\hooks\useGrowthAnalytics.test.ts
+   37:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   38:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   63:67  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   63:81  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  101:59  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  101:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  114:46  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\hooks\useGrowthAnalytics.ts
+  83:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\hooks\useStreaks.test.tsx
+  71:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  71:49  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  72:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  78:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\hooks\useUserManagement.ts
+  49:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  75:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  99:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\hooks\useWeeklyProgress.test.ts
+  27:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  35:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  36:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  37:26  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\hooks\useWeeklyProgress.ts
+  113:36  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-explicit-any
+  122:45  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-explicit-any
+  150:9   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Hanz Mapua\Workspace\HabitForge\src\hooks\useWeeklyProgress.ts:150:9
+  148 |
+  149 |     useEffect(() => {
+> 150 |         fetchWeeklyProgress();
+      |         ^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  151 |     }, [fetchWeeklyProgress]);
+  152 |
+  153 |     return { progress, isLoading, error, refresh: fetchWeeklyProgress };  react-hooks/set-state-in-effect
+
+Γ£û 63 problems (62 errors, 1 warning)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+

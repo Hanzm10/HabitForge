@@ -34,6 +34,41 @@ export default {
         'text-primary': '#F8FAFC',
         'text-secondary': '#CBD5E1',
         'text-muted': '#64748B',
+
+        // Shadcn UI Tokens
+        border: '#1F2937',
+        input: '#1F2937',
+        ring: '#6366F1',
+        background: '#0F172A',
+        foreground: '#F8FAFC',
+        primary: {
+          DEFAULT: '#6366F1',
+          foreground: '#FFFFFF',
+        },
+        secondary: {
+          DEFAULT: '#1E293B',
+          foreground: '#CBD5E1',
+        },
+        destructive: {
+          DEFAULT: '#EF4444',
+          foreground: '#FFFFFF',
+        },
+        muted: {
+          DEFAULT: '#1E293B',
+          foreground: '#64748B',
+        },
+        accent: {
+          DEFAULT: '#1E293B',
+          foreground: '#F8FAFC',
+        },
+        popover: {
+          DEFAULT: '#111827', // Using bg-card color for popovers
+          foreground: '#F8FAFC',
+        },
+        card: {
+          DEFAULT: '#111827',
+          foreground: '#F8FAFC',
+        },
       },
       letterSpacing: {
         'hero': '-0.02em',

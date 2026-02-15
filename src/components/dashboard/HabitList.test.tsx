@@ -20,6 +20,20 @@ vi.mock('../../hooks/useHabits', () => ({
     }),
 }));
 
+// Mock useCompletions hook
+const mockFetchCompletions = vi.fn();
+const mockToggleCompletion = vi.fn().mockResolvedValue({ success: true });
+
+vi.mock('../../hooks/useCompletions', () => ({
+    useCompletions: () => ({
+        completions: new Map(),
+        fetchCompletions: mockFetchCompletions,
+        toggleCompletion: mockToggleCompletion,
+        isLoading: false,
+        error: null,
+    }),
+}));
+
 const renderList = () => {
     return render(
         <MemoryRouter>

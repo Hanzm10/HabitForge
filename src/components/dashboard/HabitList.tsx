@@ -1,14 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { useHabits } from '../../hooks/useHabits';
+import { useCompletions } from '../../hooks/useCompletions';
+import { DailyToggle } from './DailyToggle';
+
+const getTodayDate = () => new Date().toISOString().split('T')[0];
 
 export const HabitList = () => {
     const { habits, fetchHabits, deleteHabit, isLoading } = useHabits();
+    const { completions, fetchCompletions, toggleCompletion, isLoading: isToggling } = useCompletions();
+    const [togglingHabitId, setTogglingHabitId] = useState<string | null>(null);
 
     useEffect(() => {
         fetchHabits();
-    }, [fetchHabits]);
+        fetchCompletions(getTodayDate());
+    }, [fetchHabits, fetchCompletions]);
+
+    const handleToggle = async (habitId: string) => {
+        setTogglingHabitId(habitId);
+        await toggleCompletion(habitId, getTodayDate());
+        setTogglingHabitId(null);
+    };
 
     const handleDelete = async (habitId: string, habitName: string) => {
         const confirmed = window.confirm(
@@ -69,10 +82,13 @@ export const HabitList = () => {
                         key={habit.id}
                         className="group flex items-center gap-4 p-4 bg-card border border-subtle rounded-xl transition-all duration-200 hover:border-accent-primary/30 hover:shadow-lg hover:shadow-accent-primary/5"
                     >
-                        {/* Color indicator */}
-                        <div
-                            className="w-3 h-3 rounded-full flex-shrink-0"
-                            style={{ backgroundColor: habit.color }}
+                        {/* Daily toggle */}
+                        <DailyToggle
+                            habitId={habit.id}
+                            habitColor={habit.color}
+                            isCompleted={completions.has(habit.id)}
+                            onToggle={() => handleToggle(habit.id)}
+                            isLoading={isToggling && togglingHabitId === habit.id}
                         />
 
                         {/* Icon */}

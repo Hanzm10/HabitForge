@@ -52,6 +52,17 @@ vi.mock('../hooks/useHabits', () => ({
     }),
 }));
 
+// Mock useCompletions for HabitList component
+vi.mock('../hooks/useCompletions', () => ({
+    useCompletions: () => ({
+        completions: new Map(),
+        fetchCompletions: vi.fn().mockResolvedValue(undefined),
+        toggleCompletion: vi.fn().mockResolvedValue({ success: true }),
+        isLoading: false,
+        error: null,
+    }),
+}));
+
 describe('AppRoutes Integration', () => {
     it('renders landing page on root route', () => {
         render(

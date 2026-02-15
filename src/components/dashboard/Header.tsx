@@ -14,7 +14,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
     // actually, let's keep it simple for now and just capitalize
 
     return (
-        <header className="flex items-center justify-between h-16 px-6 border-b border-subtle bg-white">
+        <header className="flex items-center justify-between h-16 px-6 border-b border-border-subtle bg-bg-secondary">
             <div className="flex items-center">
                 <button
                     data-testid="open-sidebar-btn"

@@ -1,3 +1,4 @@
+
 export type Json =
     | string
     | number
@@ -98,6 +99,7 @@ export type Database = {
                     email: string
                     full_name: string | null
                     id: string
+                    is_suspended: boolean | null
                     role: string
                     updated_at: string
                 }
@@ -108,6 +110,7 @@ export type Database = {
                     email: string
                     full_name?: string | null
                     id?: string
+                    is_suspended?: boolean | null
                     role?: string
                     updated_at?: string
                 }
@@ -118,6 +121,7 @@ export type Database = {
                     email?: string
                     full_name?: string | null
                     id?: string
+                    is_suspended?: boolean | null
                     role?: string
                     updated_at?: string
                 }
@@ -128,7 +132,7 @@ export type Database = {
             [_ in never]: never
         }
         Functions: {
-            [_ in never]: never
+            check_is_admin: { Args: never; Returns: boolean }
         }
         Enums: {
             [_ in never]: never

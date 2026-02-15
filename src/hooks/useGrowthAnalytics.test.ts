@@ -60,7 +60,7 @@ describe('useGrowthAnalytics', () => {
         mockFrom.mockImplementation((table) => {
             if (table === 'profiles') {
                 return {
-                    select: vi.fn().mockImplementation((columns, options) => {
+                    select: vi.fn().mockImplementation((_columns: any, options: any) => {
                         if (options?.count === 'exact') {
                             // This is the base count query (using .lt)
                             return createMockQuery({ count: 5, error: null });
@@ -98,7 +98,7 @@ describe('useGrowthAnalytics', () => {
 
     it('handles empty states', async () => {
         mockFrom.mockImplementation(() => ({
-            select: vi.fn().mockImplementation((columns, options) => {
+            select: vi.fn().mockImplementation((_columns: any, options: any) => {
                 if (options?.count === 'exact') return createMockQuery({ count: 0, error: null });
                 return createMockQuery({ data: [], error: null });
             })
@@ -111,7 +111,7 @@ describe('useGrowthAnalytics', () => {
         });
 
         expect(result.current.data).toHaveLength(30);
-        expect(result.current.data.every(d => d.count === 0)).toBe(true);
+        expect(result.current.data.every((d: any) => d.count === 0)).toBe(true);
     });
 
     it('sets error when fetching fails', async () => {

@@ -10,6 +10,7 @@ import { useAdminAnalytics } from '../../hooks/useAdminAnalytics';
 import { AnalyticsCard } from '../../components/admin/AnalyticsCard';
 import { GrowthGraph } from '../../components/admin/GrowthGraph';
 import { EngagementMetrics } from '../../components/admin/EngagementMetrics';
+import UserTable from '../../components/admin/UserTable';
 
 export default function AdminDashboard() {
     const { analytics, isLoading, error, fetchAnalytics } = useAdminAnalytics();
@@ -93,6 +94,12 @@ export default function AdminDashboard() {
 
             {/* Secondary Metrics */}
             <EngagementMetrics analytics={analytics} />
+
+            {/* User Management */}
+            <div className="mt-10">
+                <h2 className="text-xl font-bold text-text-primary mb-4">User Management</h2>
+                <UserTable />
+            </div>
         </div>
     );
 }

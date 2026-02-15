@@ -20,6 +20,19 @@ vi.mock('../../hooks/useHabits', () => ({
     }),
 }));
 
+// Mock useStreaks hook
+const mockFetchStreaks = vi.fn();
+const mockStreaks = new Map();
+
+vi.mock('../../hooks/useStreaks', () => ({
+    useStreaks: () => ({
+        streaks: mockStreaks,
+        fetchStreaks: mockFetchStreaks,
+        isLoading: false,
+        error: null,
+    }),
+}));
+
 // Mock HabitHeatmap
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 vi.mock('./HabitHeatmap', () => ({
@@ -105,19 +118,16 @@ describe('HabitList', () => {
         expect(screen.getByRole('link', { name: /create.*habit/i })).toBeInTheDocument();
     });
 
-    it('calls fetchHabits and fetchHistory on mount', () => {
+    it('calls fetchHabits, fetchCompletions, and fetchStreaks on mount', () => {
         renderList();
         expect(mockFetchHabits).toHaveBeenCalledTimes(1);
-        expect(mockFetchHistory).toHaveBeenCalledWith(
-            expect.stringContaining(new Date().getFullYear().toString()),
-            expect.stringContaining(new Date().getFullYear().toString())
-        );
+        expect(mockFetchCompletions).toHaveBeenCalledTimes(1);
+        expect(mockFetchStreaks).toHaveBeenCalledTimes(1);
     });
 
     it('fetches history when year changes', async () => {
         mockHabitsData.mockReturnValue(sampleHabits);
         renderList();
-        const user = userEvent.setup();
         const currentYear = new Date().getFullYear();
 
         // Initial fetch

@@ -5,6 +5,8 @@ import { useHabits } from '../../hooks/useHabits';
 import { useCompletions } from '../../hooks/useCompletions';
 import { DailyToggle } from './DailyToggle';
 import { HabitHeatmap } from './HabitHeatmap';
+import { StreakCounter } from './StreakCounter';
+import { useStreaks } from '../../hooks/useStreaks';
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
@@ -18,13 +20,15 @@ export const HabitList = () => {
         toggleCompletion,
         isLoading: isCompletionsLoading
     } = useCompletions();
+    const { streaks, fetchStreaks } = useStreaks();
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [togglingHabitId, setTogglingHabitId] = useState<string | null>(null);
 
     useEffect(() => {
         fetchHabits();
         fetchCompletions(getTodayDate());
-    }, [fetchHabits, fetchCompletions]);
+        fetchStreaks();
+    }, [fetchHabits, fetchCompletions, fetchStreaks]);
 
     useEffect(() => {
         // Fetch history for the selected year
@@ -36,6 +40,7 @@ export const HabitList = () => {
     const handleToggle = async (habitId: string) => {
         setTogglingHabitId(habitId);
         await toggleCompletion(habitId, getTodayDate());
+        await fetchStreaks(); // Refresh streaks after toggle
         setTogglingHabitId(null);
     };
 
@@ -134,6 +139,15 @@ export const HabitList = () => {
                         <span className="hidden sm:inline-flex px-3 py-1 text-xs font-medium rounded-full bg-bg-secondary text-text-secondary border border-subtle capitalize">
                             {habit.frequency}
                         </span>
+
+                        {/* Streak Counter */}
+                        {streaks.has(habit.id) && (
+                            <StreakCounter
+                                current={streaks.get(habit.id)?.current || 0}
+                                longest={streaks.get(habit.id)?.longest || 0}
+                                className="hidden sm:flex"
+                            />
+                        )}
 
                         {/* Actions */}
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">

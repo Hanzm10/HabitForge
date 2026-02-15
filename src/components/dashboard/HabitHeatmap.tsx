@@ -1,4 +1,4 @@
-import React from 'react';
+import { useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface HabitHeatmapProps {
@@ -9,7 +9,6 @@ interface HabitHeatmapProps {
 }
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export const HabitHeatmap: React.FC<HabitHeatmapProps> = ({ history, isLoading, year, onYearChange }) => {
 
@@ -19,7 +18,7 @@ export const HabitHeatmap: React.FC<HabitHeatmapProps> = ({ history, isLoading, 
         return localDate.toISOString().split('T')[0];
     };
 
-    const { weeks, totalCount, activeDays, maxDaily } = React.useMemo(() => {
+    const { weeks, totalCount, activeDays, maxDaily } = useMemo(() => {
         const weeksArray = [];
         let total = 0;
         let active = 0;
@@ -143,7 +142,7 @@ export const HabitHeatmap: React.FC<HabitHeatmapProps> = ({ history, isLoading, 
                             <div className="flex gap-1" role="grid">
                                 {weeks.map((week, wIndex) => (
                                     <div key={wIndex} className="flex flex-col gap-1" role="row">
-                                        {week.map((day, dIndex) => (
+                                        {week.map((day) => (
                                             <div
                                                 key={day.date}
                                                 data-date={day.date}

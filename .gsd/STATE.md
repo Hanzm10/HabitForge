@@ -25,6 +25,7 @@
 - Daily completion toggle (useCompletions hook + DailyToggle component)
 - Calendar Heatmap (useCompletions history + HabitHeatmap component)
 - Icon Picker (reusable component + form integration)
+- Streak Counter (useStreaks hook + StreakCounter component)
 
 ## Key Facts
 - **Supabase Project:** `qltyzyktalhrmsqcyebp` (ap-southeast-1, ACTIVE_HEALTHY, $0/mo)
